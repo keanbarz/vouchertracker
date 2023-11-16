@@ -118,14 +118,14 @@
                         <tbody>
                             @foreach ($mcon->zip($mranks) as [$mcon,$mranks])
                             <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mcon->office }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mcon->name }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->totalpna),2) }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->totalbca),2) }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->totallgfa),2) }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->totalqna),2) }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->totalai),2) }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->overall),2)}}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mcon->office ?? "" }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mcon->name ?? "" }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->totalpna ?? "0"),2) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->totalbca ?? "0"),2) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->totallgfa ?? "0"),2) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->totalqna ?? "0"),2) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->totalai ?? "0"),2) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($mcon->overall ?? "0"),2)}}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mranks->ranking }}</td>
                             </tr>
                             @endforeach
@@ -152,14 +152,14 @@
                         <tbody>
                             @foreach ($fcon->zip($franks) as [$fcon,$franks])
                             <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $fcon->office }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $fcon->name }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->totalpna),2) }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->totalbca),2) }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->totallgfa),2) }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->totalqna),2) }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->totalai),2) }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->overall),2)}}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $fcon->office ?? "" }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $fcon->name ?? "" }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->totalpna ?? "0"),2) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->totalbca ?? "0"),2) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->totallgfa ?? "0"),2) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->totalqna ?? "0"),2) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->totalai ?? "0"),2) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ number_format(($fcon->overall ?? "0"),2)}}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{$franks->ranking}}</td>
                             </tr>
                             @endforeach

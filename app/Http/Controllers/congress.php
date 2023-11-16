@@ -104,6 +104,7 @@ class congress extends Controller
         $scoreD = score::where('contestant_id', $scoreA->contestant_id)->where('segment', 'pna')->where('criteria', 'ai')->first();
         $total = contestant::where('id', $scoreA->contestant_id )->first();
 
+        if (Auth::User()->role === 'admin'){
         $scoreA->judge1 = $request->bnpj1;
         $scoreA->judge2 = $request->bnpj2;
         $scoreA->judge3 = $request->bnpj3;
@@ -133,6 +134,37 @@ class congress extends Controller
         $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
         $total->save();
             return redirect('tabulate/mmg');}
+        elseif (Auth::User()->role === 'judge1'){
+            $scoreA->judge1 = $request->bnpj1;
+            $scoreA->save();
+            $scoreB->judge1 = $request->spj1;
+            $scoreB->save();
+            $scoreC->judge1 = $request->oaj1;
+            $scoreC->save();
+            $scoreD->judge1 = $request->aij1;
+            $scoreD->save();
+            return redirect('tabulate/mmg');}
+        elseif (Auth::User()->role === 'judge2'){
+            $scoreA->judge2 = $request->bnpj2;
+            $scoreA->save();
+            $scoreB->judge2 = $request->spj2;
+            $scoreB->save();
+            $scoreC->judge2 = $request->oaj2;
+            $scoreC->save();
+            $scoreD->judge2 = $request->aij2;
+            $scoreD->save();
+            return redirect('tabulate/mmg');}
+        elseif (Auth::User()->role === 'judge3'){
+            $scoreA->judge3 = $request->bnpj3;
+            $scoreA->save();
+            $scoreB->judge3 = $request->spj3;
+            $scoreB->save();
+            $scoreC->judge3 = $request->oaj3;
+            $scoreC->save();
+            $scoreD->judge3 = $request->aij3;
+            $scoreD->save();        
+            return redirect('tabulate/mmg');}
+        }
 
     public  function mmgtabbcasave(Request $request, $id){
         $scoreA = score::find($id);
@@ -141,35 +173,67 @@ class congress extends Controller
         $scoreD = score::where('contestant_id', $scoreA->contestant_id)->where('segment', 'bca')->where('criteria', 'ai')->first();
         $total = contestant::where('id', $scoreA->contestant_id )->first();
     
-        $scoreA->judge1 = $request->bnpj1;
-        $scoreA->judge2 = $request->bnpj2;
-        $scoreA->judge3 = $request->bnpj3;
-        $scoreA->average = ($request->bnpj1 + $request->bnpj2 + $request->bnpj3)/3;
-        $scoreA->save();
+        if (Auth::User()->role === 'admin'){
+            $scoreA->judge1 = $request->bnpj1;
+            $scoreA->judge2 = $request->bnpj2;
+            $scoreA->judge3 = $request->bnpj3;
+            $scoreA->average = ($request->bnpj1 + $request->bnpj2 + $request->bnpj3)/3;
+            $scoreA->save();
     
-        $scoreB->judge1 = $request->spj1;
-        $scoreB->judge2 = $request->spj2;
-        $scoreB->judge3 = $request->spj3;
-        $scoreB->average = ($request->spj1 + $request->spj2 + $request->spj3)/3;
-        $scoreB->save();
+            $scoreB->judge1 = $request->spj1;
+            $scoreB->judge2 = $request->spj2;
+            $scoreB->judge3 = $request->spj3;
+            $scoreB->average = ($request->spj1 + $request->spj2 + $request->spj3)/3;
+            $scoreB->save();
     
-        $scoreC->judge1 = $request->oaj1;
-        $scoreC->judge2 = $request->oaj2;
-        $scoreC->judge3 = $request->oaj3;
-        $scoreC->average = ($request->oaj1 + $request->oaj2 + $request->oaj3)/3;
-        $scoreC->save();
+            $scoreC->judge1 = $request->oaj1;
+            $scoreC->judge2 = $request->oaj2;
+            $scoreC->judge3 = $request->oaj3;
+            $scoreC->average = ($request->oaj1 + $request->oaj2 + $request->oaj3)/3;
+            $scoreC->save();
     
-        $scoreD->judge1 = $request->aij1;
-        $scoreD->judge2 = $request->aij2;
-        $scoreD->judge3 = $request->aij3;
-        $scoreD->average = ($request->aij1 + $request->aij2 + $request->aij3)/3;
-        $scoreD->save();
+            $scoreD->judge1 = $request->aij1;
+            $scoreD->judge2 = $request->aij2;
+            $scoreD->judge3 = $request->aij3;
+            $scoreD->average = ($request->aij1 + $request->aij2 + $request->aij3)/3;
+            $scoreD->save();
     
-        $total->totalbca = ($scoreA->average + $scoreB->average + $scoreC->average + $scoreD->average)*.2;
-        $total->totalai = score::where('contestant_id', $scoreA->contestant_id)->where('criteria', 'ai')->sum('average')/4;
-        $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
-        $total->save();
-            return redirect('tabulate/mmg');}
+            $total->totalpna = ($scoreA->average + $scoreB->average + $scoreC->average + $scoreD->average)*.2;
+            $total->totalai = score::where('contestant_id', $scoreA->contestant_id)->where('criteria', 'ai')->sum('average')/4;
+            $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
+            $total->save();
+                return redirect('tabulate/mmg');}
+            elseif (Auth::User()->role === 'judge1'){
+                $scoreA->judge1 = $request->bnpj1;
+                $scoreA->save();
+                $scoreB->judge1 = $request->spj1;
+                $scoreB->save();
+                $scoreC->judge1 = $request->oaj1;
+                $scoreC->save();
+                $scoreD->judge1 = $request->aij1;
+                $scoreD->save();
+                return redirect('tabulate/mmg');}
+            elseif (Auth::User()->role === 'judge2'){
+                $scoreA->judge2 = $request->bnpj2;
+                $scoreA->save();
+                $scoreB->judge2 = $request->spj2;
+                $scoreB->save();
+                $scoreC->judge2 = $request->oaj2;
+                $scoreC->save();
+                $scoreD->judge2 = $request->aij2;
+                $scoreD->save();
+                return redirect('tabulate/mmg');}
+            elseif (Auth::User()->role === 'judge3'){
+                $scoreA->judge3 = $request->bnpj3;
+                $scoreA->save();
+                $scoreB->judge3 = $request->spj3;
+                $scoreB->save();
+                $scoreC->judge3 = $request->oaj3;
+                $scoreC->save();
+                $scoreD->judge3 = $request->aij3;
+                $scoreD->save();        
+                return redirect('tabulate/mmg');}
+    }
 
     public  function mmgtablgfasave(Request $request, $id){
         $scoreA = score::find($id);
@@ -178,35 +242,67 @@ class congress extends Controller
         $scoreD = score::where('contestant_id', $scoreA->contestant_id)->where('segment', 'lgfa')->where('criteria', 'ai')->first();
         $total = contestant::where('id', $scoreA->contestant_id )->first();
     
-        $scoreA->judge1 = $request->bnpj1;
-        $scoreA->judge2 = $request->bnpj2;
-        $scoreA->judge3 = $request->bnpj3;
-        $scoreA->average = ($request->bnpj1 + $request->bnpj2 + $request->bnpj3)/3;
-        $scoreA->save();
+        if (Auth::User()->role === 'admin'){
+            $scoreA->judge1 = $request->bnpj1;
+            $scoreA->judge2 = $request->bnpj2;
+            $scoreA->judge3 = $request->bnpj3;
+            $scoreA->average = ($request->bnpj1 + $request->bnpj2 + $request->bnpj3)/3;
+            $scoreA->save();
     
-        $scoreB->judge1 = $request->spj1;
-        $scoreB->judge2 = $request->spj2;
-        $scoreB->judge3 = $request->spj3;
-        $scoreB->average = ($request->spj1 + $request->spj2 + $request->spj3)/3;
-        $scoreB->save();
+            $scoreB->judge1 = $request->spj1;
+            $scoreB->judge2 = $request->spj2;
+            $scoreB->judge3 = $request->spj3;
+            $scoreB->average = ($request->spj1 + $request->spj2 + $request->spj3)/3;
+            $scoreB->save();
     
-        $scoreC->judge1 = $request->oaj1;
-        $scoreC->judge2 = $request->oaj2;
-        $scoreC->judge3 = $request->oaj3;
-        $scoreC->average = ($request->oaj1 + $request->oaj2 + $request->oaj3)/3;
-        $scoreC->save();
-
-        $scoreD->judge1 = $request->aij1;
-        $scoreD->judge2 = $request->aij2;
-        $scoreD->judge3 = $request->aij3;
-        $scoreD->average = ($request->aij1 + $request->aij2 + $request->aij3)/3;
-        $scoreD->save();
-
-        $total->totallgfa = ($scoreA->average + $scoreB->average + $scoreC->average + $scoreD->average)*.2;
-        $total->totalai = score::where('contestant_id', $scoreA->contestant_id)->where('criteria', 'ai')->sum('average')/4;
-        $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
-        $total->save();
-            return redirect('tabulate/mmg');}             
+            $scoreC->judge1 = $request->oaj1;
+            $scoreC->judge2 = $request->oaj2;
+            $scoreC->judge3 = $request->oaj3;
+            $scoreC->average = ($request->oaj1 + $request->oaj2 + $request->oaj3)/3;
+            $scoreC->save();
+    
+            $scoreD->judge1 = $request->aij1;
+            $scoreD->judge2 = $request->aij2;
+            $scoreD->judge3 = $request->aij3;
+            $scoreD->average = ($request->aij1 + $request->aij2 + $request->aij3)/3;
+            $scoreD->save();
+    
+            $total->totalpna = ($scoreA->average + $scoreB->average + $scoreC->average + $scoreD->average)*.2;
+            $total->totalai = score::where('contestant_id', $scoreA->contestant_id)->where('criteria', 'ai')->sum('average')/4;
+            $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
+            $total->save();
+                return redirect('tabulate/mmg');}
+            elseif (Auth::User()->role === 'judge1'){
+                $scoreA->judge1 = $request->bnpj1;
+                $scoreA->save();
+                $scoreB->judge1 = $request->spj1;
+                $scoreB->save();
+                $scoreC->judge1 = $request->oaj1;
+                $scoreC->save();
+                $scoreD->judge1 = $request->aij1;
+                $scoreD->save();
+                return redirect('tabulate/mmg');}
+            elseif (Auth::User()->role === 'judge2'){
+                $scoreA->judge2 = $request->bnpj2;
+                $scoreA->save();
+                $scoreB->judge2 = $request->spj2;
+                $scoreB->save();
+                $scoreC->judge2 = $request->oaj2;
+                $scoreC->save();
+                $scoreD->judge2 = $request->aij2;
+                $scoreD->save();
+                return redirect('tabulate/mmg');}
+            elseif (Auth::User()->role === 'judge3'){
+                $scoreA->judge3 = $request->bnpj3;
+                $scoreA->save();
+                $scoreB->judge3 = $request->spj3;
+                $scoreB->save();
+                $scoreC->judge3 = $request->oaj3;
+                $scoreC->save();
+                $scoreD->judge3 = $request->aij3;
+                $scoreD->save();        
+                return redirect('tabulate/mmg');}
+    }             
 
     public  function mmgtabqnasave(Request $request, $id){
         $scoreA = score::find($id);

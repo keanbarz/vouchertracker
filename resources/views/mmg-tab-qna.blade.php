@@ -114,6 +114,7 @@
                                 <th style="padding: 10px; min-width: unset;">{{strtoupper($scoreA->segment)}}</th>
                                 <th style="padding: 10px; min-width: unset;"></th>
                                 <th style="padding: 10px; min-width: unset;"></th>
+                                @if (Auth::user()->role === 'admin')
                                 <th style="padding: 8px; text-align: center;">Judge 1</th>
                                 <th style="padding: 8px; text-align: center;">Judge 2</th>
                                 <th style="padding: 8px; text-align: center;">Judge 3</th>
@@ -123,6 +124,19 @@
                                 <th style="padding: 8px; text-align: center;">Judge 1</th>
                                 <th style="padding: 8px; text-align: center;">Judge 2</th>
                                 <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                @elseif (Auth::user()->role === 'judge1')
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                @elseif (Auth::user()->role === 'judge2')
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                @elseif (Auth::user()->role === 'judge3')
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -131,6 +145,7 @@
                                 <form method="post" action="/tabulate/mmg/qna/save/{{$scoreA->id}}">@csrf<button class="dropbtn">Save</button></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestant->office }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestant->name }}</td>
+                                @if (Auth::user()->role === 'admin')
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="dcj1" value="{{$scoreA->judge1}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="dcj2" value="{{$scoreA->judge2}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="dcj3" value="{{$scoreA->judge3}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
@@ -140,6 +155,19 @@
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="aij1" value="{{$scoreC->judge1}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="aij2" value="{{$scoreC->judge2}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="aij3" value="{{$scoreC->judge3}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
+                                @elseif (Auth::user()->role === 'judge1')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="dcj1" value="{{$scoreA->judge1}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="caj1" value="{{$scoreB->judge1}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="aij1" value="{{$scoreC->judge1}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
+                                @elseif (Auth::user()->role === 'judge2')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="dcj2" value="{{$scoreA->judge2}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="caj2" value="{{$scoreB->judge2}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="aij2" value="{{$scoreC->judge2}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
+                                @elseif (Auth::user()->role === 'judge3')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="dcj3" value="{{$scoreA->judge3}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="caj3" value="{{$scoreB->judge3}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="aij3" value="{{$scoreC->judge3}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
+                                @endif
                                 </form>
                             </tr>
                         </tbody>
