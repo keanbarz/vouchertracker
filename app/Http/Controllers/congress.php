@@ -281,7 +281,7 @@ class congress extends Controller
             $scoreD->average = ($request->aij1 + $request->aij2 + $request->aij3)/3;
             $scoreD->save();
     
-            $total->totalpna = ($scoreA->average + $scoreB->average + $scoreC->average + $scoreD->average)*.2;
+            $total->totalbca = ($scoreA->average + $scoreB->average + $scoreC->average + $scoreD->average)*.2;
             $total->totalai = score::where('contestant_id', $scoreA->contestant_id)->where('criteria', 'ai')->sum('average')/4;
             $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
             $total->save();
@@ -350,7 +350,7 @@ class congress extends Controller
             $scoreD->average = ($request->aij1 + $request->aij2 + $request->aij3)/3;
             $scoreD->save();
     
-            $total->totalpna = ($scoreA->average + $scoreB->average + $scoreC->average + $scoreD->average)*.2;
+            $total->totallgfa = ($scoreA->average + $scoreB->average + $scoreC->average + $scoreD->average)*.2;
             $total->totalai = score::where('contestant_id', $scoreA->contestant_id)->where('criteria', 'ai')->sum('average')/4;
             $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
             $total->save();
@@ -852,8 +852,8 @@ class congress extends Controller
                 $newscore->criteria = 'ai';
                 $newscore->segment = 'qna';
                 $newscore->save();
-            return redirect('/contestants');}   
-            {return redirect('/contestants')->with('error', 'Error occurred while saving data.');}}}
+            return redirect('/contestants');}}
+            return redirect('/contestants');}
     
     public function contestants(){//done
         $mmg = contestant::where('contest', 'mmg')->where('name','!=','init')->get();
