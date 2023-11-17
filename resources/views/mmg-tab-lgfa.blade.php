@@ -152,6 +152,7 @@
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">
                                 <form method="post" action="/tabulate/mmg/lgfa/save/{{$scoreA->id}}">@csrf<button class="dropbtn">Save</button></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestant->office }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestant->name }}</td>
                                 @if (Auth::user()->role === 'admin')
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="bnpj1" value="{{$scoreA->judge1}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><input size="5" type="text" name="bnpj2" value="{{$scoreA->judge2}}" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;"></input></td>

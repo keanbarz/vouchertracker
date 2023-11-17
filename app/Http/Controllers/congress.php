@@ -35,6 +35,89 @@ class congress extends Controller
             abort(403, 'Unauthorized action.');}
 
     public function mmg(){
+        $pnabnp = score::where('segment', 'pna')->where('criteria', 'bnp')->get();
+        $pnasp = score::where('segment', 'pna')->where('criteria', 'sp')->get();
+        $pnaoa = score::where('segment', 'pna')->where('criteria', 'oa')->get();
+        $pnaai = score::where('segment', 'pna')->where('criteria', 'ai')->get();
+        $bcabnp = score::where('segment', 'bca')->where('criteria', 'bnp')->get();
+        $bcasp = score::where('segment', 'bca')->where('criteria', 'sp')->get();
+        $bcaoa = score::where('segment', 'bca')->where('criteria', 'oa')->get();
+        $bcaai = score::where('segment', 'bca')->where('criteria', 'ai')->get();
+        $lgfabnp = score::where('segment', 'lgfa')->where('criteria', 'bnp')->get();
+        $lgfasp = score::where('segment', 'lgfa')->where('criteria', 'sp')->get();
+        $lgfaoa = score::where('segment', 'lgfa')->where('criteria', 'oa')->get();
+        $lgfaai = score::where('segment', 'lgfa')->where('criteria', 'ai')->get();
+        $qnadc = score::where('segment', 'qna')->where('criteria', 'dc')->get();
+        $qnaca = score::where('segment', 'qna')->where('criteria', 'ca')->get();
+        $qnaai = score::where('segment', 'qna')->where('criteria', 'ai')->get();
+
+
+        foreach ($pnabnp->zip($pnasp, $pnaoa, $pnaai) as [$pnabnprecalc,$pnasprecalc, $pnaoarecalc, $pnaairecalc]){
+            $pnabnprecalc->average = ($pnabnprecalc->judge1 + $pnabnprecalc->judge2 + $pnabnprecalc->judge3)/3;
+            $pnabnprecalc->save();
+            $pnasprecalc->average = ($pnasprecalc->judge1 + $pnasprecalc->judge2 + $pnasprecalc->judge3)/3;
+            $pnasprecalc->save();
+            $pnaoarecalc->average = ($pnaoarecalc->judge1 + $pnaoarecalc->judge2 + $pnaoarecalc->judge3)/3;
+            $pnaoarecalc->save();
+            $pnaairecalc->average = ($pnaairecalc->judge1 + $pnaairecalc->judge2 + $pnaairecalc->judge3)/3;
+            $pnaairecalc->save();
+            $total = contestant::where('id', $pnabnprecalc->contestant_id)->first();
+            $total->totalpna = ($pnabnprecalc->average + $pnasprecalc->average + $pnaoarecalc->average + $pnaairecalc->average)*.2;
+            $total->totalai = score::where('contestant_id', $pnabnprecalc->contestant_id)->where('criteria', 'ai')->sum('average')/4;
+            $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
+            $total->save();
+        }
+
+        foreach ($bcabnp->zip($bcasp, $bcaoa, $bcaai) as [$bcabnprecalc,$bcasprecalc, $bcaoarecalc, $bcaairecalc]){
+            $bcabnprecalc->average = ($bcabnprecalc->judge1 + $bcabnprecalc->judge2 + $bcabnprecalc->judge3)/3;
+            $bcabnprecalc->save();
+            $bcasprecalc->average = ($bcasprecalc->judge1 + $bcasprecalc->judge2 + $bcasprecalc->judge3)/3;
+            $bcasprecalc->save();
+            $bcaoarecalc->average = ($bcaoarecalc->judge1 + $bcaoarecalc->judge2 + $bcaoarecalc->judge3)/3;
+            $bcaoarecalc->save();
+            $bcaairecalc->average = ($bcaairecalc->judge1 + $bcaairecalc->judge2 + $bcaairecalc->judge3)/3;
+            $bcaairecalc->save();
+            $total = contestant::where('id', $bcabnprecalc->contestant_id)->first();
+            $total->totalbca = ($bcabnprecalc->average + $bcasprecalc->average + $bcaoarecalc->average + $bcaairecalc->average)*.2;
+            $total->totalai = score::where('contestant_id', $bcabnprecalc->contestant_id)->where('criteria', 'ai')->sum('average')/4;
+            $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
+            $total->save();
+        }
+
+        foreach ($lgfabnp->zip($lgfasp, $lgfaoa, $lgfaai) as [$lgfabnprecalc,$lgfasprecalc, $lgfaoarecalc, $lgfaairecalc]){
+            $lgfabnprecalc->average = ($lgfabnprecalc->judge1 + $lgfabnprecalc->judge2 + $lgfabnprecalc->judge3)/3;
+            $lgfabnprecalc->save();
+            $lgfasprecalc->average = ($lgfasprecalc->judge1 + $lgfasprecalc->judge2 + $lgfasprecalc->judge3)/3;
+            $lgfasprecalc->save();
+            $lgfaoarecalc->average = ($lgfaoarecalc->judge1 + $lgfaoarecalc->judge2 + $lgfaoarecalc->judge3)/3;
+            $lgfaoarecalc->save();
+            $lgfaairecalc->average = ($lgfaairecalc->judge1 + $lgfaairecalc->judge2 + $lgfaairecalc->judge3)/3;
+            $lgfaairecalc->save();
+            $total = contestant::where('id', $lgfabnprecalc->contestant_id)->first();
+            $total->totallgfa = ($lgfabnprecalc->average + $lgfasprecalc->average + $lgfaoarecalc->average + $lgfaairecalc->average)*.2;
+            $total->totalai = score::where('contestant_id', $lgfabnprecalc->contestant_id)->where('criteria', 'ai')->sum('average')/4;
+            $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
+            $total->save();
+        }
+
+        foreach ($qnadc->zip($qnaca, $qnaai) as [$qnadcrecalc, $qnacarecalc, $qnaairecalc]){
+            $qnadcrecalc->average = ($qnadcrecalc->judge1 + $qnadcrecalc->judge2 + $qnadcrecalc->judge3)/3;
+            $qnadcrecalc->save();
+            $qnacarecalc->average = ($qnacarecalc->judge1 + $qnacarecalc->judge2 + $qnacarecalc->judge3)/3;
+            $qnacarecalc->save();
+            $qnaairecalc->average = ($qnaairecalc->judge1 + $qnaairecalc->judge2 + $qnaairecalc->judge3)/3;
+            $qnaairecalc->save();
+            $total = contestant::where('id', $qnaairecalc->contestant_id)->first();
+            $total->totalqna = ($qnadcrecalc->average + $qnacarecalc->average + $qnaairecalc->average)*.3;
+            $total->totalai = score::where('contestant_id', $qnadcrecalc->contestant_id)->where('criteria', 'ai')->sum('average')/4;
+            $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
+            $total->save();
+        }
+
+
+
+
+
         $fcon = contestant::where('gender', 'F')->get();
         $mcon = contestant::where('gender', 'M')->get();
         $mranks = $this->mrank();
@@ -309,7 +392,8 @@ class congress extends Controller
         $scoreB = score::where('contestant_id', $scoreA->contestant_id)->where('segment', 'qna')->where('criteria', 'ca')->first();
         $scoreC = score::where('contestant_id', $scoreA->contestant_id)->where('segment', 'qna')->where('criteria', 'ai')->first();
         $total = contestant::where('id', $scoreA->contestant_id )->first();
-    
+
+        if (Auth::User()->role === 'admin'){
         $scoreA->judge1 = $request->dcj1;
         $scoreA->judge2 = $request->dcj2;
         $scoreA->judge3 = $request->dcj3;
@@ -332,8 +416,31 @@ class congress extends Controller
         $total->totalai = score::where('contestant_id', $scoreA->contestant_id)->where('criteria', 'ai')->sum('average')/4;
         $total->overall =  $total->totalpna + $total->totalbca + $total->totallgfa + $total->totalqna + $total->totalai;
         $total->save();
+            return redirect('tabulate/mmg');}
+        elseif (Auth::User()->role === 'judge1'){
+            $scoreA->judge1 = $request->dcj1;
+            $scoreA->save();
+            $scoreB->judge1 = $request->caj1;
+            $scoreB->save();
+            $scoreC->judge1 = $request->aij1;
+            $scoreC->save();
+            return redirect('tabulate/mmg');}
+        elseif (Auth::User()->role === 'judge2'){
+            $scoreA->judge2 = $request->dcj2;
+            $scoreA->save();
+            $scoreB->judge2 = $request->caj2;
+            $scoreB->save();
+            $scoreC->judge2 = $request->aij2;
+            $scoreC->save();
+            return redirect('tabulate/mmg');}        
+        elseif (Auth::User()->role === 'judge3'){
+            $scoreA->judge3 = $request->dcj3;
+            $scoreA->save();
+            $scoreB->judge3 = $request->caj3;
+            $scoreB->save();
+            $scoreC->judge3 = $request->aij3;
+            $scoreC->save();}
             return redirect('tabulate/mmg');}             
-
 
     //GIP Modern Dance Contest
     public function gmdcclose(){

@@ -121,11 +121,18 @@
                                 <th style="padding: 10px; min-width: unset;">ACTION</th>
                                 <th style="padding: 10px; min-width: unset;">Office</th>
                                 <th style="padding: 10px; min-width: unset;">Candidate Name</th>
+                                @if (Auth::User()->role === 'admin')
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Beauty and Poise (30%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Stage Presence (30%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Overall Appearance (30%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Audience Impact (10%)</th>
                                 <th style="padding: 10px; min-width: unset;">TOTAL (100%)</th>
+                                @else
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Beauty and Poise (30%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Stage Presence (30%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Overall Appearance (30%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Audience Impact (10%)</th>
+                                @endif
                             </tr>
                         </thead>
                         <thead>
@@ -133,6 +140,7 @@
                                 <th style="padding: 10px; min-width: unset;">PNA</th>
                                 <th style="padding: 10px; min-width: unset;"></th>
                                 <th style="padding: 10px; min-width: unset;"></th>
+                                @if (Auth::User()->role === 'admin')
                                 <th style="padding: 8px; text-align: center;">Judge 1</th>
                                 <th style="padding: 8px; text-align: center;">Judge 2</th>
                                 <th style="padding: 8px; text-align: center;">Judge 3</th>
@@ -146,6 +154,22 @@
                                 <th style="padding: 8px; text-align: center;">Judge 2</th>
                                 <th style="padding: 8px; text-align: center;">Judge 3</th>
                                 <th style="padding: 8px; text-align: center;">(sum of average per criteria)</th>
+                                @elseif (Auth::User()->role === 'judge1')
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                @elseif (Auth::User()->role === 'judge2')
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                @elseif (Auth::User()->role === 'judge3')
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -159,6 +183,7 @@
                                 @endif</form></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestant->office }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestant->name }}</td>
+                                @if (Auth::User()->role === 'admin')
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreA->judge1 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreA->judge2 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreA->judge3 }}</td>
@@ -171,7 +196,23 @@
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreD->judge1 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreD->judge2 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreD->judge3 }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{number_format($contestant->totalpna,2)/.2}}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{number_format((($contestant->totalpna)/.2),2)}}</td>
+                                @elseif (Auth::User()->role === 'judge1')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreA->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreB->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreC->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreD->judge1 }}</td>
+                                @elseif (Auth::User()->role === 'judge2')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreA->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreB->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreC->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreD->judge2 }}</td>
+                                @elseif (Auth::User()->role === 'judge3')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreA->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreB->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreC->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreD->judge3 }}</td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
@@ -183,11 +224,18 @@
                                 <th style="padding: 10px; min-width: unset;">ACTION</th>
                                 <th style="padding: 10px; min-width: unset;">Office</th>
                                 <th style="padding: 10px; min-width: unset;">Candidate Name</th>
+                                @if (Auth::User()->role === 'admin')
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Beauty and Poise (30%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Stage Presence (30%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Overall Appearance (30%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Audience Impact (10%)</th>
                                 <th style="padding: 10px; min-width: unset;">TOTAL (100%)</th>
+                                @else
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Beauty and Poise (30%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Stage Presence (30%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Overall Appearance (30%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Audience Impact (10%)</th>
+                                @endif
                             </tr>
                         </thead>
                         <thead>
@@ -195,6 +243,7 @@
                                 <th style="padding: 10px; min-width: unset;">BCA</th>
                                 <th style="padding: 10px; min-width: unset;"></th>
                                 <th style="padding: 10px; min-width: unset;"></th>
+                                @if (Auth::User()->role === 'admin')
                                 <th style="padding: 8px; text-align: center;">Judge 1</th>
                                 <th style="padding: 8px; text-align: center;">Judge 2</th>
                                 <th style="padding: 8px; text-align: center;">Judge 3</th>
@@ -208,6 +257,22 @@
                                 <th style="padding: 8px; text-align: center;">Judge 2</th>
                                 <th style="padding: 8px; text-align: center;">Judge 3</th>
                                 <th style="padding: 8px; text-align: center;">(sum of average per criteria)</th>
+                                @elseif (Auth::User()->role === 'judge1')
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                @elseif (Auth::User()->role === 'judge2')
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                @elseif (Auth::User()->role === 'judge3')
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -221,6 +286,7 @@
                                 @endif</form></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestantB->office }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestantB->name }}</td>
+                                @if (Auth::User()->role === 'admin')
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreE->judge1 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreE->judge2 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreE->judge3 }}</td>
@@ -233,7 +299,23 @@
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreH->judge1 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreH->judge2 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreH->judge3 }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{number_format($contestantB->totalbca,2)/.2}}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{number_format((($contestantB->totalbca)/.2),2)}}</td>
+                                @elseif (Auth::User()->role === 'judge1')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreE->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreF->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreG->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreH->judge1 }}</td>
+                                @elseif (Auth::User()->role === 'judge2')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreE->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreF->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreG->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreH->judge2 }}</td>
+                                @elseif (Auth::User()->role === 'judge3')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreE->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreF->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreG->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreH->judge3 }}</td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
@@ -245,11 +327,18 @@
                                 <th style="padding: 10px; min-width: unset;">ACTION</th>
                                 <th style="padding: 10px; min-width: unset;">Office</th>
                                 <th style="padding: 10px; min-width: unset;">Candidate Name</th>
+                                @if (Auth::User()->role === 'admin')
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Beauty and Poise (30%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Stage Presence (30%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Overall Appearance (30%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Audience Impact (10%)</th>
                                 <th style="padding: 10px; min-width: unset;">TOTAL (100%)</th>
+                                @else
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Beauty and Poise (30%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Stage Presence (30%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Overall Appearance (30%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Audience Impact (10%)</th>
+                                @endif
                             </tr>
                         </thead>
                         <thead>
@@ -257,6 +346,7 @@
                                 <th style="padding: 10px; min-width: unset;">LGFA</th>
                                 <th style="padding: 10px; min-width: unset;"></th>
                                 <th style="padding: 10px; min-width: unset;"></th>
+                                @if (Auth::User()->role === 'admin')
                                 <th style="padding: 8px; text-align: center;">Judge 1</th>
                                 <th style="padding: 8px; text-align: center;">Judge 2</th>
                                 <th style="padding: 8px; text-align: center;">Judge 3</th>
@@ -270,6 +360,22 @@
                                 <th style="padding: 8px; text-align: center;">Judge 2</th>
                                 <th style="padding: 8px; text-align: center;">Judge 3</th>
                                 <th style="padding: 8px; text-align: center;">(sum of average per criteria)</th>
+                                @elseif (Auth::User()->role === 'judge1')
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                @elseif (Auth::User()->role === 'judge2')
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                @elseif (Auth::User()->role === 'judge3')
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -283,6 +389,7 @@
                                 @endif</form></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestantC->office }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestantC->name }}</td>
+                                @if (Auth::User()->role === 'admin')
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreI->judge1 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreI->judge2 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreI->judge3 }}</td>
@@ -295,7 +402,23 @@
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreL->judge1 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreL->judge2 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreL->judge3 }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{number_format($contestantC->totallgfa,2)/.2}}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{number_format((($contestantC->totallgfa)/.2),2)}}</td>
+                                @elseif (Auth::User()->role === 'judge1')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreI->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreJ->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreK->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreL->judge1 }}</td>
+                                @elseif (Auth::User()->role === 'judge2')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreI->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreJ->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreK->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreL->judge2 }}</td>
+                                @elseif (Auth::User()->role === 'judge3')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreI->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreJ->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreK->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreL->judge3 }}</td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
@@ -307,10 +430,16 @@
                                 <th style="padding: 10px; min-width: unset;">ACTION</th>
                                 <th style="padding: 10px; min-width: unset;">Office</th>
                                 <th style="padding: 10px; min-width: unset;">Candidate Name</th>
+                                @if (Auth::User()->role === 'admin')
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Delivery/Confidence (40%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Content of Answer (50%)</th>
                                 <th colspan="3" style="padding: 10px; min-width: unset;">Audience Impact (10%)</th>
                                 <th style="padding: 10px; min-width: unset;">TOTAL (100%)</th>
+                                @else
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Delivery/Confidence (40%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Content of Answer (50%)</th>
+                                <th colspan="1" style="padding: 10px; min-width: unset;">Audience Impact (10%)</th>
+                                @endif
                             </tr>
                         </thead>
                         <thead>
@@ -318,6 +447,7 @@
                                 <th style="padding: 10px; min-width: unset;">QNA</th>
                                 <th style="padding: 10px; min-width: unset;"></th>
                                 <th style="padding: 10px; min-width: unset;"></th>
+                                @if (Auth::User()->role === 'admin')
                                 <th style="padding: 8px; text-align: center;">Judge 1</th>
                                 <th style="padding: 8px; text-align: center;">Judge 2</th>
                                 <th style="padding: 8px; text-align: center;">Judge 3</th>
@@ -328,6 +458,19 @@
                                 <th style="padding: 8px; text-align: center;">Judge 2</th>
                                 <th style="padding: 8px; text-align: center;">Judge 3</th>
                                 <th style="padding: 8px; text-align: center;">(sum of average per criteria)</th>
+                                @elseif (Auth::User()->role === 'judge1')
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                <th style="padding: 8px; text-align: center;">Judge 1</th>
+                                @elseif (Auth::User()->role === 'judge2')
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                <th style="padding: 8px; text-align: center;">Judge 2</th>
+                                @elseif (Auth::User()->role === 'judge3')
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                <th style="padding: 8px; text-align: center;">Judge 3</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -341,6 +484,7 @@
                                 @endif</form></td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestantD->office }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $contestantD->name }}</td>
+                                @if (Auth::User()->role === 'admin')
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreM->judge1 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreM->judge2 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreM->judge3 }}</td>
@@ -350,7 +494,20 @@
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreO->judge1 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreO->judge2 }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreO->judge3 }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{number_format($contestantD->totalqna,2)/.3}}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{number_format((($contestantD->totalqna)/.3),2)}}</td>
+                                @elseif (Auth::User()->role === 'judge1')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreM->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreN->judge1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreO->judge1 }}</td>
+                                @elseif (Auth::User()->role === 'judge2')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreM->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreN->judge2 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreO->judge2 }}</td>
+                                @elseif (Auth::User()->role === 'judge3')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreM->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreN->judge3 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $scoreO->judge3 }}</td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
