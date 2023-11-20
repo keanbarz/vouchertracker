@@ -79,7 +79,18 @@
             border: 1px solid #ddd;
             border-radius: 10px;
             position: absolute;
-            }   
+            
+            }  
+        .up {
+            background-color: green;
+            color: white;
+            min-width: 80px;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            
+            }    
     </style>
     <style>/*Containers*/
         .container {
@@ -115,10 +126,10 @@
                         <tbody>
                             @foreach ($mmg as $mmg)
                             <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"></td>           
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><form method="post" action="/contestants/{{$mmg->id}}">@csrf<input name="contest" type="hidden" value="mmg"><button type="submit" class="up">Update</button></form></td>           
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mmg->name }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mmg->gender }}</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mmg->office }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mmg->office }}</td></form>
                             </tr>
                             @endforeach
                         </tbody>

@@ -65,6 +65,9 @@ Route::get('/register', function () {
     Route::get('/tally/gcqb/open', [congress::class, 'gcqbopen'])->middleware(['auth', 'verified']);
 
     //Participants
+    Route::post('/contestants/{id}', [congress::class, 'contestantsup'])->middleware(['auth', 'verified']);
+    Route::post('/delete/{id}', [congress::class, 'delete'])->middleware(['auth', 'verified']);
+    Route::post('/update/{id}/save', [congress::class, 'save'])->middleware(['auth', 'verified']);
     Route::get('/contestants', [congress::class, 'contestants'])->middleware(['auth', 'verified']);
     Route::post('/addparticipant', [congress::class, 'registercan'])->middleware(['auth', 'verified']);
     Route::get('/dashboard', [congress::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');

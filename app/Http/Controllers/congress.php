@@ -861,6 +861,70 @@ class congress extends Controller
         $gcqb = contestant::where('contest', 'gcqb')->where('name','!=','init')->get();
         $mge = contestant::where('contest', 'mge')->where('name','!=','init')->get();
             return view('contestants',['mmg' => $mmg, 'gmdc' => $gmdc , 'gcqb' => $gcqb, 'mge' => $mge]);}
+    
+    public function contestantsup(Request $request, $id){//done
+        if ($request->contest === 'mmg'){
+        $update = contestant::where('contest', 'mmg')->find($id);}
+        elseif ($request->contest === 'gmdc'){ 
+        $update = contestant::where('contest', 'gmdc')->find($id);}
+        elseif ($request->contest === 'gcqb'){
+        $update = contestant::where('contest', 'gcqb')->find($id);}
+        elseif ($request->contest === 'mge'){
+        $update = contestant::where('contest', 'mge')->find($id);}
+        return view('update',['update' => $update]);}        
+
+    public function save(Request $request, $id)
+        { if ($request->contest === 'mmg'){
+            $save = contestant::where('contest', 'mmg')->find($id);
+            $save->name = $request->name;
+            $save->gender = $request->gender;
+            $save->office = $request->office;
+            $save->save();}
+            elseif ($request->contest === 'gmdc'){ 
+            $save = contestant::where('contest', 'gmdc')->find($id);
+            $save->name = $request->name;
+            $save->gender = $request->gender;
+            $save->office = $request->office;
+            $save->save();}
+            elseif ($request->contest === 'gcqb'){
+            $save = contestant::where('contest', 'gcqb')->find($id);
+            $save->name = $request->name;
+            $save->gender = $request->gender;
+            $save->office = $request->office;
+            $save->save();}
+            elseif ($request->contest === 'mge'){
+            $save = contestant::where('contest', 'mge')->find($id);
+            $save->name = $request->name;
+            $save->gender = $request->gender;
+            $save->office = $request->office;
+            $save->save();}
+
+        return redirect('/contestants');
+        }
+
+     public function delete(Request $request, $id){
+        if ($request->contest === 'mmg'){
+            $delete = contestant::where('contest', 'mmg')->find($id);
+            $deletesc = score::where('contestant_id', $id)->get();
+            $delete->delete();
+            $deletesc->delete();}
+            elseif ($request->contest === 'gmdc'){ 
+            $delete = contestant::where('contest', 'gmdc')->find($id);
+            $deletesc = score::where('contestant_id', $id)->get();
+            $delete->delete();
+            $deletesc->delete();}
+            elseif ($request->contest === 'gcqb'){
+            $delete = contestant::where('contest', 'gcqb')->find($id);
+            $deletesc = score::where('contestant_id', $id)->get();
+            $delete->delete();
+            $deletesc->delete();}
+            elseif ($request->contest === 'mge'){
+            $delete = contestant::where('contest', 'mge')->find($id);
+            $deletesc = score::where('contestant_id', $id)->get();
+            $delete->delete();
+            $deletesc->delete();}
+            return redirect('/contestants');
+}
 
     public function dashboard(){//done
         $user = Auth::user()->get();
