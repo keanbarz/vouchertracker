@@ -24,7 +24,7 @@
 
         /* Add some hover effect to table rows */
         tr:hover {
-        background-color: blue;
+        background-color: yellow;
         }
     </style>
     <style>/*Buttons*/
@@ -60,7 +60,7 @@
     <div class="py-12">
         <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-9" id="update_table" style="display:none">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                     <table>
                         <thead>
                             <tr id="truphead">
@@ -136,7 +136,7 @@
         </br>
         <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-9">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                     <table>
                         <thead>
                             <tr id="truphead0">
@@ -215,7 +215,7 @@
     <div class="py-12">
         <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-9">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                     <p style="text-align: center;">ACCESS DENIED<p>
                 </div>
             </div>

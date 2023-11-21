@@ -24,7 +24,7 @@
 
         /* Add some hover effect to table rows */
         tr:hover {
-            background-color: blue;
+            background-color: yellow;
             }
         .in {
             border-radius: 10px; 
@@ -61,7 +61,7 @@
         <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-9">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
-                    <p style="text-align: center;">SCORES IN NO PARTICULAR ORDER<p>
+                    <p style="text-align: center; color:green"><b>SCORES IN NO PARTICULAR ORDER</b></p>
                 </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
     <div class="py-12">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 container">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg box">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                    <table>
                         <thead>
                             <tr>
@@ -95,7 +95,7 @@
                 </div>
             </div>
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg box">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                    <table>
                         <thead>
                             <tr>
@@ -124,7 +124,7 @@
     <div class="py-8">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 container">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg box">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                    <table>
                         <thead>
                             <tr>
@@ -149,7 +149,7 @@
                 </div>
             </div>
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg box">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                    <table>
                         <thead>
                             <tr>
@@ -180,7 +180,7 @@
     <div class="py-8">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 container">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg box">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                     <table>
                         <thead>
                             <tr>
@@ -205,7 +205,7 @@
                 </div>
             </div>
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg box">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                 </div>
             </div>
         </div>

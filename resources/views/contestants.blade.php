@@ -5,7 +5,7 @@
             <div class="flex">
                 <div class="flex">
                     <div class="">
-                        <h5 style="color:white">Register Participant<h5>
+                        <h5 style="color:black">Register Participant<h5>
                         <form method="post" action="/addparticipant">
                             {{ csrf_field() }}
                             <input class="in" type="text" name="name" placeholder="Name" value="" required/>
@@ -63,7 +63,7 @@
 
         /* Add some hover effect to table rows */
         tr:hover {
-            background-color: blue;
+            background-color: yellow;
             }
         .in {
             border-radius: 10px; 
@@ -110,7 +110,7 @@
     <div class="py-12">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 container">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg box">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                    <table>
                         <thead>
                             <tr>
@@ -137,7 +137,7 @@
                 </div>
             </div>
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg box">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                    <table>
                         <thead>
                             <tr>
@@ -168,7 +168,7 @@
     <div class="py-8">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 container">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg box">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                    <table>
                         <thead>
                             <tr>
@@ -195,7 +195,7 @@
                 </div>
             </div>
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg box">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                     <table>
                         <thead>
                             <tr>

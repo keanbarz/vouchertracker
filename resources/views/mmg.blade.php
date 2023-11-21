@@ -23,7 +23,7 @@
 
         /* Add some hover effect to table rows */
         tr:hover {
-            background-color: blue;
+            background-color: yellow;
             }
     </style>
     <style>
@@ -99,7 +99,7 @@
     <div class="py-12">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white;">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green;">
                 @if (Auth::user()->contest === 'all' || Auth::user()->contest === 'mmg')
                     <table>
                         <thead>
@@ -134,7 +134,7 @@
                 </div>
             </div></br>
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white;">
+                <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green;">
                     <table>
                         <thead>
                             <tr>

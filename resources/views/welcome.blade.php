@@ -38,7 +38,7 @@
 
             /* Add some hover effect to table rows */
             tr:hover {
-                background-color: blue;
+                background-color: yellow;
                 }
             .in {
                 border-radius: 10px; 
@@ -140,7 +140,7 @@
             <div class="py-12">
                 <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 container">
                     <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-                        <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                        <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                         <table>
                                 <thead>
                                     <tr>
@@ -165,7 +165,7 @@
                         </div>
                     </div>
                     <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-                        <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                        <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                         <table>
                                 <thead>
                                     <tr>
@@ -194,7 +194,7 @@
             <div class="py-8">
                 <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 container">
                     <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-                        <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                        <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                         <table>
                                 <thead>
                                     <tr>
@@ -219,7 +219,7 @@
                         </div>
                     </div>
                     <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-                        <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                        <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                         <table>
                                 <thead>
                                     <tr>
@@ -250,7 +250,7 @@
             <div class="py-8">
                 <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 container">
                     <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-                        <div class="p-6 text-gray-900 dark:text-gray-100" style="color: white">
+                        <div class="p-6 text-gray-900 dark:text-gray-100" style="color: green">
                             <table>
                                 <thead>
                                     <tr>
