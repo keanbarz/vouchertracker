@@ -907,22 +907,26 @@ class congress extends Controller
             $delete = contestant::where('contest', 'mmg')->find($id);
             $deletesc = score::where('contestant_id', $id)->get();
             $delete->delete();
-            $deletesc->delete();}
+            foreach ($deletesc as $deletesc){
+            $deletesc->delete();}}
             elseif ($request->contest === 'gmdc'){ 
             $delete = contestant::where('contest', 'gmdc')->find($id);
             $deletesc = score::where('contestant_id', $id)->get();
             $delete->delete();
-            $deletesc->delete();}
+            foreach ($deletesc as $deletesc){
+            $deletesc->delete();}}
             elseif ($request->contest === 'gcqb'){
             $delete = contestant::where('contest', 'gcqb')->find($id);
             $deletesc = score::where('contestant_id', $id)->get();
             $delete->delete();
-            $deletesc->delete();}
+            foreach ($deletesc as $deletesc){
+            $deletesc->delete();}}
             elseif ($request->contest === 'mge'){
             $delete = contestant::where('contest', 'mge')->find($id);
             $deletesc = score::where('contestant_id', $id)->get();
             $delete->delete();
-            $deletesc->delete();}
+            foreach ($deletesc as $deletesc){
+            $deletesc->delete();}}
             return redirect('/contestants');
 }
 

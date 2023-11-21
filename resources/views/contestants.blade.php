@@ -5,13 +5,13 @@
             <div class="flex">
                 <div class="flex">
                     <div class="">
-                        <h5 style="color:black">Register Participant<h5>
+                        <h5 style="color:green">Register Participant<h5>
                         <form method="post" action="/addparticipant">
                             {{ csrf_field() }}
                             <input class="in" type="text" name="name" placeholder="Name" value="" required/>
                             <select class="in" name="office" required>
                                 <option value="" disabled selected>Office</option>
-                                <option value="DNFO">DNFO/DIEO</option>
+                                <option value="DNFO">DNFO</option>
                                 <option value="DSFO">DSFO</option>
                                 <option value="DOCFO">DOCFO</option>
                                 <option value="DORFO">DORFO</option>
@@ -114,10 +114,16 @@
                    <table>
                         <thead>
                             <tr>
+                                @if (Auth::user()->role === 'admin')
                                 <th colspan="4" style="padding: 10px; min-width: unset;">MR. AND MS. GIP 2023</th>
+                                @else
+                                <th colspan="3" style="padding: 10px; min-width: unset;">MR. AND MS. GIP 2023</th> 
+                                @endif
                             </tr>
                             <tr>
+                                @if (Auth::user()->role === 'admin')
                                 <th style="padding: 10px; min-width: unset;">ACTION</th>
+                                @endif
                                 <th style="padding: 10px; min-width: unset;">Name</th>
                                 <th style="padding: 10px; min-width: unset;">Gender</th>
                                 <th style="padding: 10px; min-width: unset;">Office</th>
@@ -126,7 +132,9 @@
                         <tbody>
                             @foreach ($mmg as $mmg)
                             <tr>
+                                @if (Auth::user()->role === 'admin')
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><form method="post" action="/contestants/{{$mmg->id}}">@csrf<input name="contest" type="hidden" value="mmg"><button type="submit" class="up">Update</button></form></td>           
+                                @endif
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mmg->name }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mmg->gender }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mmg->office }}</td></form>
@@ -144,7 +152,9 @@
                                 <th colspan="4" style="padding: 10px; min-width: unset;">GIP MODERN DANCE CONTEST</th>
                             </tr>
                             <tr>
+                                @if (Auth::user()->role === 'admin')
                                 <th style="padding: 10px; min-width: unset;">ACTION</th>
+                                @endif
                                 <th style="padding: 10px; min-width: unset;">Name</th>
                                 <th style="padding: 10px; min-width: unset;">Gender</th>
                                 <th style="padding: 10px; min-width: unset;">Office</th>
@@ -153,7 +163,9 @@
                         <tbody>
                             @foreach ($gmdc as $gmdc)
                             <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"></td>           
+                                @if (Auth::user()->role === 'admin')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><form method="post" action="/contestants/{{$gmdc->id}}">@csrf<input name="contest" type="hidden" value="gmdc"><button type="submit" class="up">Update</button></form></td>           
+                                @endif
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $gmdc->name }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $gmdc->gender }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $gmdc->office }}</td>
@@ -175,7 +187,9 @@
                                 <th colspan="4" style="padding: 10px; min-width: unset;">GIP CONGRESS QUIZ BEE</th>
                             </tr>
                             <tr>
+                                @if (Auth::user()->role === 'admin')
                                 <th style="padding: 10px; min-width: unset;">ACTION</th>
+                                @endif
                                 <th style="padding: 10px; min-width: unset;">Name</th>
                                 <th style="padding: 10px; min-width: unset;">Gender</th>
                                 <th style="padding: 10px; min-width: unset;">Office</th>
@@ -184,7 +198,9 @@
                         <tbody>
                             @foreach ($gcqb as $gcqb)
                             <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"></td>           
+                                @if (Auth::user()->role === 'admin')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><form method="post" action="/contestants/{{$gcqb->id}}">@csrf<input name="contest" type="hidden" value="gcqb"><button type="submit" class="up">Update</button></form></td>           
+                                @endif
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $gcqb->name }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $gcqb->gender }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $gcqb->office }}</td>
@@ -202,7 +218,9 @@
                                 <th colspan="4" style="padding: 10px; min-width: unset;">MY GIP EXPERIENCE</th>
                             </tr>
                             <tr>
+                                @if (Auth::user()->role === 'admin')
                                 <th style="padding: 10px; min-width: unset;">ACTION</th>
+                                @endif
                                 <th style="padding: 10px; min-width: unset;">Name</th>
                                 <th style="padding: 10px; min-width: unset;">Gender</th>
                                 <th style="padding: 10px; min-width: unset;">Office</th>
@@ -211,7 +229,9 @@
                         <tbody>
                             @foreach ($mge as $mge)
                             <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"></td>           
+                                @if (Auth::user()->role === 'admin')
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: left;"><form method="post" action="/contestants/{{$mge->id}}">@csrf<input name="contest" type="hidden" value="mge"><button type="submit" class="up">Update</button></form></td>           
+                                @endif
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mge->name }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mge->gender }}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{{ $mge->office }}</td>
