@@ -12,7 +12,8 @@
         "hisamu/php-xbase": "^2.1",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "livewire/livewire": "^3.2"
     },
     "require-dev": {
         "backpack/generators": "^4.0",
