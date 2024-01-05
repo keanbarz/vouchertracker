@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\congress;
+use App\Http\Controllers\all;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,20 +16,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+//antiregister
+Route::get('/register', function () {
+    return redirect('/');
+});
 Route::get('/', function () {
     return redirect('login');
 });
+
+
 
 //For Study
 Route::get('/experiment', function () {
     return view('experiment');
 });
 
-Route::get('/register', function () {
-    return redirect('/');
-});
 
-//start GIP CONGRESS 2023
+
+//VoucherTracker
+    Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [all::class, 'dashboard'])->name('dashboard');
+    Route::post('/save', [all::class, 'save'])->middleware(['auth', 'verified']);});
+
+
+
     //Mr & Ms GIP 2023
     Route::get('/tally/mmg', [congress::class, 'mmg'])->middleware(['auth', 'verified'])->name('mmg');
     Route::get('/tabulate/mmg', [congress::class, 'mmgtab'])->middleware(['auth', 'verified']);
@@ -70,7 +83,7 @@ Route::get('/register', function () {
     Route::post('/update/{id}/save', [congress::class, 'save'])->middleware(['auth', 'verified']);
     Route::get('/contestants', [congress::class, 'contestants'])->middleware(['auth', 'verified']);
     Route::post('/addparticipant', [congress::class, 'registercan'])->middleware(['auth', 'verified']);
-    Route::get('/dashboard', [congress::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+    
     //end GIP CONGRESS 2023
 
     Route::middleware('auth')->group(function () {
