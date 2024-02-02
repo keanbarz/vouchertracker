@@ -70,7 +70,10 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Singapore',
+    'datetime' => 'm/d/Y h:i A',
+    'date' => 'm/d/Y',
+
 
     /*
     |--------------------------------------------------------------------------

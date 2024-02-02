@@ -7,58 +7,15 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link href="/dashboard" active="{{ request()->routeIs('dashboard') ? 'false' : '' }}" style="color:green">
                         <!-- Laravel Logo <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /> -->
-                        {{ __('GIP CONGRESS 2023 TABULATION SYSTEM') }}
+                        {{ __('I DUNNO, IM JUST LEARNING') }}
                     </x-nav-link>
                 </div>
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link href="/tally/mmg" active="{{ request()->routeIs('mmg') ? 'false' : '' }}" style="color:green">
-                        {{ __('Mr. & Ms. GIP 2023') }}
-                    </x-nav-link>
-                    <x-nav-link href="/tally/gmdc" active="{{ request()->routeIs('gmdc') ? 'false' : '' }}" style="color:green">
-                        {{ __('GIP Modern Dance Contest') }}
-                    </x-nav-link>
-                    <x-nav-link href="/tally/gcqb" active="{{ request()->routeIs('gcqb') ? 'false' : '' }}" style="color:green">
-                        {{ __('GIP Congress Quiz Bee') }}
-                    </x-nav-link>
-                    <x-nav-link href="/tally/mge" active="{{ request()->routeIs('mge') ? 'false' : '' }}" style="color:green">
-                        {{ __('My GIP Experience') }}
-                    </x-nav-link>
                 </div>
             </div>
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
-                <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-gray dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                    <a href="/contestants">
-                        <div style="color:green">{{ __('CONTESTANTS') }}</div>
-                    </a>                                                        
-                </button>                                                          
-                <x-dropdown width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-gray dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div style="color:green">{{ __('TABULATION') }}</div>
-                            <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
-                    <x-slot name="content">
-                        <x-dropdown-link href="/tabulate/mmg">
-                            {{ __('Mr. & Ms. GIP 2023') }}
-                        </x-dropdown-link>
-                        <x-dropdown-link href="/tabulate/gmdc">
-                            {{ __('GIP Modern Dance Contest') }}
-                        </x-dropdown-link>
-                        <x-dropdown-link href="/tabulate/gcqb">
-                            {{ __('GIP Congress Quiz Bee') }}
-                        </x-dropdown-link>
-                        <x-dropdown-link href="/tabulate/mge">
-                            {{ __('My GIP Experience') }}
-                        </x-dropdown-link>
-                    </x-slot>
-                </x-dropdown>
                 <x-dropdown width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-gray dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">

@@ -105,7 +105,7 @@
                    <table>
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">ENCODE RECEIVED VOUCHERS</th>
+                                <th colspan="5" class="text-center">VOUCHERS FOR OBLIGATION</th>
                             </tr>
                             <tr>
                                 <th class="text-center">ACTION</th>
@@ -116,44 +116,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <form method="post" action="/save">@CSRF
-                                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center; ">
-                                        <button class="btn btn-primary">Submit</button>
-                                    </td>
-                                    <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">
-                                        <input required class="container rounded" size="10" type="text" name="payee" placeholder="Basi pwede integrate tung payee something basta mag add dv" value="" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;">
-                                        </input>    
-                                    </td>           
-                                    <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">
-                                        <input required class="container rounded" size="10" type="text" name="particulars" placeholder="Particulars" value="" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;">
-                                        </input>    
-                                    </td>
-                                    <td style="border: 1px solid #ddd; padding: 8px; text-align: right;">
-                                        <input required class="container rounded" size="10" type="number" name="amount" placeholder="Amount" value="" style="color: black; padding-right: 3px; padding-left: 3px; text-align: center;">
-                                        </input>    
-                                    </td>
-                                    <td style="border: 1px solid #ddd; padding: 8px; text-align: left; container">
-                                    </td>
-                                </form>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px "></td>
-                                <td></td>           
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px "></td>
-                                <td></td>           
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th colspan="5" class="text-center">RECEIVED VOUCHERS</th>
-                            </tr>
                             <tr>
                                 <th colspan="5" class="text-center">//paginate 100?, searchbar, etc.</th>
                             </tr>
