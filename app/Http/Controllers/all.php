@@ -8,6 +8,8 @@ use App\Models\voucher;
 use App\Models\obligation;
 use App\Models\entry;
 
+use Illuminate\Support\Facades\Log;
+
 class all extends Controller
 {
     //Receiving
@@ -61,7 +63,6 @@ class all extends Controller
 
         foreach ($itemIds as $itemId) {
             $selectedValue = $request->input("forward_{$itemId}",3);       
-            
             switch ($selectedValue) {
                 case 0:
                     $forward = voucher::find($itemId);
@@ -77,18 +78,29 @@ class all extends Controller
                     $forward->save();
                         break;
                 case 1:
+                    if (Auth::user()->role === 'admin'){
                     $forward = voucher::find($itemId);
                     $voucher = new entry;
-                    $voucher->voucherId = $forward->id;
+                    $voucher->voucherId = $forward->id;}
+                    else {
+                    $forward = obligation::find($itemId);
+                    $voucher = new entry;                        
+                    $voucher->voucherId = $forward->voucherId;}
                     $voucher->payee = $forward->payee;
                     $voucher->particulars = $forward->particulars;
                     $voucher->amount = $forward->amount;
                     $voucher->save();
                     $forward->is_forwarded="1";
                     $forward->save();
+                    if (Auth::user()->role === 'admin'){
                     $forward->remarks = $forward->remarks . "<br>Forwarded for Entry by " . (Auth::user()->name) . " on " . ($forward->updated_at);
                     $forward->save();
-                        break;
+                        break;}
+                    else{
+                    $remarks = voucher::find($forward->voucherId);
+                    $remarks->remarks = $remarks->remarks . "<br>Forwarded for Entry by " . (Auth::user()->name) . " on " . ($remarks->updated_at);
+                    $remarks->save();
+                    break;}
                 default:
                     break;
             }

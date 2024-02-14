@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 
 class EmailProcessingCommand extends Command
@@ -26,77 +27,83 @@ class EmailProcessingCommand extends Command
      * Execute the console command.
      */
     public function handle()
-    {\Log::info('Command is running');
-                // Specify the root folder path within the storage directory
-        $rootFolderPath = 'C:/Users/User/Desktop/To Email';
-        \Log::info('1');
+    {
+        // Specify the root folder path within the storage directory
+        $rootFolderPath = storage_path('app/Email');
         // Get all folders in the root folder
-        $folders = Storage::directories($rootFolderPath);
-        \Log::info('2');
+        $folders = File::directories($rootFolderPath);
+        \Log::info('Folders: ' . print_r($folders, true));
         // Loop through each folder
         foreach ($folders as $folder) {
             // Get the folder name
             $folderName = basename($folder);
+
             // Specify the email address based on the folder name
-            $destinationEmail = getEmailForFolder($folderName);
+            $destinationEmail = $this->getEmailForFolder($folderName);
+            
+            \Log::info($folder);
 
             // Get all files in the folder
-            $files = Storage::allFiles($folder);
-
-            // Check if the folder has any files
-            if (!empty($files)) {
-                // Loop through each file in the folder
-                foreach ($files as $file) {
-                    // Read the contents of the file
-                    $contents = Storage::get($file);
-
-                    // Process the contents and send email
-                    $subject = 'CONFIDENTIAL (EXPERIMENTAL!)'; // Replace with your desired subject
-                    sendEmail($destinationEmail, $subject, $contents);
-                }
-            }
+            $files = File::allFiles($folder);
+            \Log::info($files);
+            
+            // Process the contents and send email
+            $subject = 'Unclaimed Transaction as of ' . date('m/d/Y') . ' (EXPERIMENTAL!)';  // Replace with your desired subject
+            $this->sendEmail($destinationEmail, $subject, $files);
         }
+    }    
 
-        /**
-         * Get the email address based on the folder name.
-         *
-         * @param string $folderName
-         * @return string
-         */
-        function getEmailForFolder($folderName)
+    /**
+     * Get the email address based on the folder name.
+     *
+     * @param string $folderName
+     * @return string
+     */
+    function getEmailForFolder($folderName)
+    {
+        // Add your logic to map folder names to email addresses
+        // You can use a switch statement, an array lookup, or any other method
+        // based on your specific requirements.
+
+        switch ($folderName) 
         {
-            // Add your logic to map folder names to email addresses
-            // You can use a switch statement, an array lookup, or any other method
-            // based on your specific requirements.
-
-            switch ($folderName) {
-                case 'ROXI':
-                    return 'dolexiremittance@gmail.com';
-                case 'sent':
-                    return 'sent@example.com';
-                // Add more cases as needed
-                default:
-                    return 'default@example.com';
-            }
+            case 'ROXI':
+                return 'dolexiremittance@gmail.com';
+            case 'sent':
+                return 'sent@example.com';
+            // Add more cases as needed
+            default:
+                return 'default@example.com';
         }
+    }
 
-        /**
-         * Send an email.
-         *
-         * @param string $to
-         * @param string $subject
-         * @param string $content
-         */
-        function sendEmail($to, $subject, $content)
-        {
-            // Replace this with your email sending logic using Laravel's Mail facade
-            // This is just a basic example, and you need to configure your email settings
-            // in Laravel before using this in a production environment.
+    /**
+     * Send an email.
+     *
+     * @param string $destinationEmail
+     * @param string $subject
+     * @param string $content
+     */
+    function sendEmail($destinationEmail, $subject, $files)
+    {
+       // Check if the content is empty
+    /*if (empty($files)) {
+        // Log an error or handle it as needed
+        \Log::error('Email content is empty. Skipping sending email.');
+        return;
+    }*/
 
-            Mail::raw($content, function ($message) use ($to, $subject) {
-                $message->to($to)
-                        ->subject($subject);
-            });
-        }
+    // Replace this with your email sending logic using Laravel's Mail facade
+    // This is just a basic example, and you need to configure your email settings
+    // in Laravel before using this in a production environment.
+
+    Mail::raw('', function ($message) use ($destinationEmail, $subject, $files) {
+        $message->to($destinationEmail)
+                ->subject($subject);
+    
+        foreach ($files as $file) {
+            // Attach each file to the email
+            $message->attach($file);
+    }});
     }
 }
