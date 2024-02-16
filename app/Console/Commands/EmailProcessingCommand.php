@@ -43,16 +43,14 @@ class EmailProcessingCommand extends Command
 
                 // Specify the email address based on the folder name
                 $destinationEmail = $this->getEmailForFolder($folderName, $subFolderName);
+                $password = $subFolderName[0] . 'dole11' . strtolower($folderName) . date('mdy');
                 
-                \Log::info($folder);
-
                 // Get all files in the folder
                 $files = File::allFiles($subFolder);
-                \Log::info($files);
                 
                 // Process the contents and send email
-                $subject = '(!EXPERIMENT!) ' . $folderName . ' ' . $subFolderName . ' - Unclaimed Palawan Transaction/s as of ' . date('m/d/Y');  // Replace with your desired subject
-                $this->sendEmail($destinationEmail, $subject, $files);
+                $subject = $folderName . ' ' . $subFolderName . ' - Unclaimed Palawan Transaction/s as of ' . date('m/d/Y');  // Replace with your desired subject
+                $this->sendEmail($destinationEmail, $subject, $files, $password);
 
                 if ($destinationEmail != 'dolexiremittance@gmail.com'){
                     File::delete($files);
@@ -88,9 +86,9 @@ class EmailProcessingCommand extends Command
             case 'DCFO':
                 switch ($subFolderName){
                     case 'TUPAD':
-                    return 'dolexiremittance@gmail.com';
+                    return 'tupadremitdcfodole11@gmail.com';
                     case 'SPES':
-                    return 'dolexiremittance@gmail.com';
+                    return 'spesremitdcfodole11@gmail.com';
                     case 'GIP':
                     return 'dolexiremittance@gmail.com';
                 }
@@ -101,7 +99,7 @@ class EmailProcessingCommand extends Command
                     case 'SPES':
                     return 'dolexiremittance@gmail.com';
                     case 'GIP':
-                    return 'dolexiremittance@gmail.com';
+                    return 'gipremittancednfodole11@gmail.com';
                 }
             case 'DIEO':
                 switch ($subFolderName){
@@ -115,29 +113,29 @@ class EmailProcessingCommand extends Command
             case 'DORFO':
                 switch ($subFolderName){
                     case 'TUPAD':
-                    return 'dolexiremittance@gmail.com';
-                    case 'SPES':
-                    return 'dolexiremittance@gmail.com';
+                    return 'tupadremittancedorfodole11@gmail.com';
                     case 'GIP':
-                    return 'dolexiremittance@gmail.com';
+                    return 'dorfogipremittancedole11@gmail.com';
+                    case 'SPES':
+                    return 'dorfospesremittancedole11@gmail.com';
                 }
             case 'DOFO':
                 switch ($subFolderName){
                     case 'TUPAD':
                     return 'dolexiremittance@gmail.com';
                     case 'SPES':
-                    return 'dolexiremittance@gmail.com';
+                    return 'spesremitdsfodole11@gmail.com';
                     case 'GIP':
-                    return 'dolexiremittance@gmail.com';
+                    return 'gipremittancedofodole11@gmail.com';
                 }
             case 'DSFO':
                 switch ($subFolderName){
                     case 'TUPAD':
-                    return 'dolexiremittance@gmail.com';
+                    return 'tupadremittancedsfodole11@gmail.com';
                     case 'SPES':
-                    return 'dolexiremittance@gmail.com';
+                    return 'spesremittancedsfodole11@gmail.com';
                     case 'GIP':
-                    return 'dolexiremittance@gmail.com';
+                    return 'gipremittancedsfodole11@gmail.com';
                 }       
             case 'DOCFO':
                 switch ($subFolderName){
@@ -154,6 +152,8 @@ class EmailProcessingCommand extends Command
         }
     }
 
+
+
     /**
      * Send an email.
      *
@@ -161,7 +161,7 @@ class EmailProcessingCommand extends Command
      * @param string $subject
      * @param string $content
      */
-    function sendEmail($destinationEmail, $subject, $files)
+    function sendEmail($destinationEmail, $subject, $files, $password)
     {
        // Check if the content is empty
     if (empty($files)) {
@@ -174,10 +174,11 @@ class EmailProcessingCommand extends Command
     // This is just a basic example, and you need to configure your email settings
     // in Laravel before using this in a production environment.
 
-    $messageBody = 'Good day!' . PHP_EOL . PHP_EOL; // Concatenating strings with a new line
-    $messageBody .= 'Plese see attached file for the List of Unclaimed Palawan Transactions.' . PHP_EOL; // Concatenating another string with a new line
-    $messageBody .= 'To view the file, please enter "To Be Determined" as the file password' . PHP_EOL . PHP_EOL;
-    $messageBody .= 'Thank you,' . PHP_EOL . 'NOVIE JANE B. PANIAGUA';
+    $messageBody = 'Sir/Ma\'am' . PHP_EOL . PHP_EOL . 'Good day!'; // Concatenating strings with a new line
+    $messageBody .= 'Kindly see attached file for the List of Unclaimed Palawan Transactions as of ' . date('m/d/Y') . '.' . PHP_EOL; // Concatenating another string with a new line
+    $messageBody .= 'To view the file, please enter "' . $password . '" as the file password.' . PHP_EOL . PHP_EOL;
+    $messageBody .= 'Furthermore, this is to remind you that the TRANSACTION CODES are STRICTLY CONFIDENTIAL in nature.' . PHP_EOL . PHP_EOL;
+    $messageBody .= 'Thank you and God Bless.' . PHP_EOL . PHP_EOL . PHP_EOL . 'Yours truly,' . PHP_EOL . PHP_EOL . 'NOVIE JANE B. PANIAGUA';
 
 
     Mail::raw($messageBody, function ($message) use ($destinationEmail, $subject, $files) {
