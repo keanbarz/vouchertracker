@@ -32,7 +32,17 @@ class EmailProcessingCommand extends Command
         $rootFolderPath = storage_path('app/Email');
         // Get all folders in the root folder
         $folders = File::directories($rootFolderPath);
-        \Log::info('Folders: ' . print_r($folders, true));
+
+        do {
+            $nature = $this->ask('What is the nature of transaction?' . "\n" . '[1] Unclaimed' . "\n" . '[2] For Cancellation' . "\n" .  '(1 or 2)');
+            
+            if ($nature != '1' && $nature != '2') {
+                $this->line('Invalid input. Please try again.');
+            }
+        } while ($nature != '1' && $nature != '2');
+
+        $count = 1;
+
         // Loop through each folder
         foreach ($folders as $folder) {
             // Get the folder name
@@ -49,15 +59,18 @@ class EmailProcessingCommand extends Command
                 $files = File::allFiles($subFolder);
                 
                 // Process the contents and send email
-                $subject = $folderName . ' ' . $subFolderName . ' - Unclaimed Palawan Transaction/s as of ' . date('m/d/Y');  // Replace with your desired subject
-                $this->sendEmail($destinationEmail, $subject, $files, $password);
+               \Log::info($folderName . ' ' . $subFolderName . ' ' . $destinationEmail);
+               $this->sendEmail($destinationEmail, $files, $password, $folderName, $subFolderName, $count, $nature);
 
                 if ($destinationEmail != 'dolexiremittance@gmail.com'){
                     File::delete($files);
                 }
-
+                $count = $count + 1;
             }
         }
+        echo "Transactions emailed successfully.";
+        echo "Press Enter to continue...";
+        readline();
     }    
 
     /**
@@ -74,81 +87,62 @@ class EmailProcessingCommand extends Command
 
         switch ($folderName) 
         {
-            case 'ROXI':
-                switch ($subFolderName){
-                    case 'TUPAD':
-                    return 'dolexiremittance@gmail.com';
-                    case 'SPES':
-                    return 'dolexiremittance@gmail.com';
-                    case 'GIP':
-                    return 'dolexiremittance@gmail.com';
-                }
-            case 'DCFO':
-                switch ($subFolderName){
-                    case 'TUPAD':
-                    return 'tupadremitdcfodole11@gmail.com';
-                    case 'SPES':
-                    return 'spesremitdcfodole11@gmail.com';
-                    case 'GIP':
-                    return 'dolexiremittance@gmail.com';
-                }
-            case 'DNFO':
-                switch ($subFolderName){
-                    case 'TUPAD':
-                    return 'dolexiremittance@gmail.com';
-                    case 'SPES':
-                    return 'dolexiremittance@gmail.com';
-                    case 'GIP':
-                    return 'gipremittancednfodole11@gmail.com';
-                }
-            case 'DIEO':
-                switch ($subFolderName){
-                    case 'TUPAD':
-                    return 'dolexiremittance@gmail.com';
-                    case 'SPES':
-                    return 'dolexiremittance@gmail.com';
-                    case 'GIP':
-                    return 'dolexiremittance@gmail.com';
-                }
             case 'DORFO':
-                switch ($subFolderName){
-                    case 'TUPAD':
-                    return 'tupadremittancedorfodole11@gmail.com';
-                    case 'GIP':
-                    return 'dorfogipremittancedole11@gmail.com';
-                    case 'SPES':
-                    return 'dorfospesremittancedole11@gmail.com';
-                }
-            case 'DOFO':
-                switch ($subFolderName){
-                    case 'TUPAD':
-                    return 'dolexiremittance@gmail.com';
-                    case 'SPES':
-                    return 'spesremitdsfodole11@gmail.com';
-                    case 'GIP':
-                    return 'gipremittancedofodole11@gmail.com';
-                }
+                switch ($subFolderName)
+                    {
+                        case 'GIP':
+                        case 'SPES':
+                            return strtolower($folderName . $subFolderName . 'remittancedole11@gmail.com');
+                        default:
+                            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+                    }
+            case 'DCFO':
+                switch ($subFolderName)
+                    {
+                        case 'GIP':
+                        case 'SPES':
+                        case 'TUPAD':
+                            return strtolower($subFolderName . 'remit' . $folderName . 'dole11@gmail.com');
+                            default:
+                            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+                    }
             case 'DSFO':
-                switch ($subFolderName){
-                    case 'TUPAD':
-                    return 'tupadremittancedsfodole11@gmail.com';
-                    case 'SPES':
-                    return 'spesremittancedsfodole11@gmail.com';
-                    case 'GIP':
-                    return 'gipremittancedsfodole11@gmail.com';
-                }       
-            case 'DOCFO':
-                switch ($subFolderName){
-                    case 'TUPAD':
-                    return 'dolexiremittance@gmail.com';
-                    case 'SPES':
-                    return 'dolexiremittance@gmail.com';
-                    case 'GIP':
-                    return 'dolexiremittance@gmail.com';
-                }                 
-            // Add more cases as needed
+                            switch ($subFolderName)
+                                {
+                                    case 'GIP':
+                                    case 'SPES':
+                                        return strtolower($subFolderName . 'remit' . $folderName . 'dole11@gmail.com');
+                                    default:
+                                        return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+                                }                    
+            case 'DNFO':
+                switch ($subFolderName)
+                    {
+                        case 'TUPAD':
+                            return strtolower($subFolderName . 'remittancedole11' . $folderName . '@gmail.com');
+                        default:
+                            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+                    }
+            case 'DIEO':
+                switch ($subFolderName)
+                    {
+                        case 'GIP':
+                            return strtolower($subFolderName . 'remit' . $folderName . 'dole11@gmail.com');
+                        default:
+                            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+                    }
+            case 'ROXI':
+                switch ($subFolderName)
+                    {
+                        case 'SPES':
+                        case 'GIP':
+                            return 'employmentremittancerodole11@gmail.com';
+                        default:
+                            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+                    }
+                    
             default:
-                return 'default@example.com';
+            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
         }
     }
 
@@ -161,33 +155,50 @@ class EmailProcessingCommand extends Command
      * @param string $subject
      * @param string $content
      */
-    function sendEmail($destinationEmail, $subject, $files, $password)
+    function sendEmail($destinationEmail, $files, $password, $folderName, $subFolderName, $count, $nature)
     {
-       // Check if the content is empty
-    if (empty($files)) {
-        // Log an error or handle it as needed
-        \Log::error('Email content is empty. Skipping sending email.');
-        return;
-    }
+        // Check if the content is empty
+        if (empty($files)) {
+            // Log an error or handle it as needed
+            $this->info($count . '. ' . $folderName . '-' . $subFolderName . ' has no Transactions. Skipping sending email.');
+            \Log::info($count);
+            return;
+        }
 
-    // Replace this with your email sending logic using Laravel's Mail facade
-    // This is just a basic example, and you need to configure your email settings
-    // in Laravel before using this in a production environment.
+        $this->info($count . '. Sending Transactions to ' . $folderName . '-' . $subFolderName . '...');
 
-    $messageBody = 'Sir/Ma\'am' . PHP_EOL . PHP_EOL . 'Good day!'; // Concatenating strings with a new line
-    $messageBody .= 'Kindly see attached file for the List of Unclaimed Palawan Transactions as of ' . date('m/d/Y') . '.' . PHP_EOL; // Concatenating another string with a new line
-    $messageBody .= 'To view the file, please enter "' . $password . '" as the file password.' . PHP_EOL . PHP_EOL;
-    $messageBody .= 'Furthermore, this is to remind you that the TRANSACTION CODES are STRICTLY CONFIDENTIAL in nature.' . PHP_EOL . PHP_EOL;
-    $messageBody .= 'Thank you and God Bless.' . PHP_EOL . PHP_EOL . PHP_EOL . 'Yours truly,' . PHP_EOL . PHP_EOL . 'NOVIE JANE B. PANIAGUA';
+        $messageBody = 'Sir/Ma\'am' . PHP_EOL . PHP_EOL . 'Good day!' . PHP_EOL . PHP_EOL; // Concatenating strings with a new line
 
+        switch ($nature) {
+            case '1':
+                $subject = $folderName . ' ' . $subFolderName . ' - Unclaimed Palawan Transaction/s as of ' . date('m/d/Y');  // Replace with your desired subject
+                $messageBody .= 'Kindly see attached file for the List of Unclaimed Palawan Transactions as of ' . date('m/d/Y') . '.' . PHP_EOL; // Concatenating another string with a new line
+                break;
+            case '2':
+                $subject = $folderName . ' ' . $subFolderName . ' - Palawan Transaction/s for cancellation as of ' . date('m/d/Y');  // Replace with your desired subject
+                $dateString = date('m/d/Y'); // Get current date in the desired format
+                $timestamp = strtotime($dateString); // Convert date string to timestamp
+                $newTimestamp = strtotime('+2 days', $timestamp); // Add 2 days to the timestamp
+                $newDateString = date('m/d/Y', $newTimestamp); // Convert the new timestamp back to desired format
+                $messageBody .= 'Kindly see attached file for the List of Palawan Transactions that are subject for cancellation on ' . $newDateString . '.' . PHP_EOL; // Concatenating another string with a new line
+                $messageBody .= 'Please ensure to notify the beneficiaries to avoid cancellation. Once cancelled, the amount will be refunded to DOLE XI and shall be remitted to the National Treasury.' . PHP_EOL; // Concatenating another string with a new line
+                break;
+            default:
+                # code...
+                break;
+        }
 
-    Mail::raw($messageBody, function ($message) use ($destinationEmail, $subject, $files) {
-        $message->to($destinationEmail)
-                ->subject($subject);
+        $messageBody .= 'To view the file, please enter "' . $password . '" as the file password.' . PHP_EOL . PHP_EOL;
+        $messageBody .= 'Furthermore, this is to remind you that the TRANSACTION CODES are STRICTLY CONFIDENTIAL in nature.' . PHP_EOL . PHP_EOL;
+        $messageBody .= 'Thank you and God Bless.' . PHP_EOL . PHP_EOL . PHP_EOL . 'Yours truly,' . PHP_EOL . PHP_EOL . 'NOVIE JANE B. PANIAGUA';
+
+        Mail::raw($messageBody, function ($message) use ($destinationEmail, $subject, $files){
+            $message->to($destinationEmail)->subject($subject);
     
-        foreach ($files as $file) {
-            // Attach each file to the email
-            $message->attach($file);
-    }});
+            foreach ($files as $file) {
+                // Attach each file to the email
+                $message->attach($file);
+            }
+        });
     }
 }

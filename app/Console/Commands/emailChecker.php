@@ -41,7 +41,7 @@ class emailChecker extends Command
                 $subFolderName = basename($subFolder);
 
                 // Specify the email address based on the folder name
-                $destinationEmail = strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+                $destinationEmail = $this->getEmailForFolder($folderName, $subFolderName);
                 $password = $subFolderName[0] . 'dole11' . strtolower($folderName) . date('mdy');
                 \Log::info($password);
                 // Get all files in the folder
@@ -87,24 +87,27 @@ class emailChecker extends Command
      */
     function getEmailForFolder($folderName, $subFolderName)
     {
-        // Add your logic to map folder names to email addresses
-        // You can use a switch statement, an array lookup, or any other method
-        // based on your specific requirements.
-
         switch ($folderName) 
         {
             case 'DORFO':
                 switch ($subFolderName)
                     {
                         case 'GIP':
-                            return 'dorfogipremittancedole11@gmail.com';
                         case 'SPES':
-                            return 'dorfospesremittancedole11@gmail.com';
+                            return strtolower($folderName . $subFolderName . 'remittancedole11@gmail.com');
                         default:
-                            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+                            break;
+                    }
+            case 'DIEO':
+                switch ($subFolderName)
+                    {
+                        case 'GIP':
+                            return 'gipremitdieodole11@gmail.com';
+                        default:
+                            break;
                     }
             default:
-                return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
         }
     }
 }
