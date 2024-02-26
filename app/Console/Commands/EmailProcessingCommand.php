@@ -9,21 +9,24 @@ use Illuminate\Support\Facades\Mail;
 
 class EmailProcessingCommand extends Command
 {
-    /**
+    /*
+     *
      * The name and signature of the console command.
      *
      * @var string
      */
     protected $signature = 'email:process';
 
-    /**
+    /*
+     *
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Command description';
 
-    /**
+    /*
+     *
      * Execute the console command.
      */
     public function handle()
@@ -32,22 +35,32 @@ class EmailProcessingCommand extends Command
         $rootFolderPath = storage_path('app/Email');
         // Get all folders in the root folder
         $folders = File::directories($rootFolderPath);
-
+        
         do {
             $nature = $this->ask('What is the nature of transaction?' . "\n" . '[1] Unclaimed' . "\n" . '[2] For Cancellation' . "\n" .  '(1 or 2)');
             
             if ($nature != '1' && $nature != '2') {
                 $this->line('Invalid input. Please try again.');
             }
+            if ($nature = '2') {
+                $day = $this->ask('Will be cancelled in how many days?' .  "\n" .  '(1 - 5)');
+                
+            }
         } while ($nature != '1' && $nature != '2');
 
-        $count = 1;
+        $dateString = date('m/d/Y'); // Get current date in the desired format
+        $timestamp = strtotime($dateString); // Convert date string to timestamp
+        $newTimestamp = strtotime('+' . $day . 'days', $timestamp); // Add 2 days to the timestamp
+        $newDateString = date('m/d/Y', $newTimestamp); // Convert the new timestamp back to desired format
+        \Log::info($newDateString);
+        $count = 01;
 
         // Loop through each folder
         foreach ($folders as $folder) {
             // Get the folder name
             $folderName = basename($folder);
-            $subFolders = File::directories($folder);           
+            $subFolders = File::directories($folder);
+            // Sub Loop           
             foreach ($subFolders as $subFolder){
                 $subFolderName = basename($subFolder);
 
@@ -60,11 +73,10 @@ class EmailProcessingCommand extends Command
                 
                 // Process the contents and send email
                \Log::info($folderName . ' ' . $subFolderName . ' ' . $destinationEmail);
-               $this->sendEmail($destinationEmail, $files, $password, $folderName, $subFolderName, $count, $nature);
+               $this->sendEmail($destinationEmail, $files, $password, $folderName, $subFolderName, $count, $nature, $newDateString);
 
-                if ($destinationEmail != 'dolexiremittance@gmail.com'){
-                    File::delete($files);
-                }
+                File::delete($files);
+                
                 $count = $count + 1;
             }
         }
@@ -76,7 +88,7 @@ class EmailProcessingCommand extends Command
     /**
      * Get the email address based on the folder name.
      *
-     * @param string $folderName
+     * @param string
      * @return string
      */
     function getEmailForFolder($folderName, $subFolderName)
@@ -146,26 +158,24 @@ class EmailProcessingCommand extends Command
         }
     }
 
-
-
-    /**
+    /*
      * Send an email.
      *
      * @param string $destinationEmail
      * @param string $subject
      * @param string $content
      */
-    function sendEmail($destinationEmail, $files, $password, $folderName, $subFolderName, $count, $nature)
+    function sendEmail($destinationEmail, $files, $password, $folderName, $subFolderName, $count, $nature, $newDateString)
     {
         // Check if the content is empty
         if (empty($files)) {
             // Log an error or handle it as needed
-            $this->info($count . '. ' . $folderName . '-' . $subFolderName . ' has no Transactions. Skipping sending email.');
+            $this->info(sprintf("%02d", $count) . '. ' . $folderName . '-' . $subFolderName . ' has no Transactions. Skipping sending email.');
             \Log::info($count);
             return;
         }
 
-        $this->info($count . '. Sending Transactions to ' . $folderName . '-' . $subFolderName . '...');
+        $this->info(sprintf("%02d", $count) . '. Sending Transactions to ' . $folderName . '-' . $subFolderName . '...');
 
         $messageBody = 'Sir/Ma\'am' . PHP_EOL . PHP_EOL . 'Good day!' . PHP_EOL . PHP_EOL; // Concatenating strings with a new line
 
@@ -176,10 +186,6 @@ class EmailProcessingCommand extends Command
                 break;
             case '2':
                 $subject = $folderName . ' ' . $subFolderName . ' - Palawan Transaction/s for cancellation as of ' . date('m/d/Y');  // Replace with your desired subject
-                $dateString = date('m/d/Y'); // Get current date in the desired format
-                $timestamp = strtotime($dateString); // Convert date string to timestamp
-                $newTimestamp = strtotime('+2 days', $timestamp); // Add 2 days to the timestamp
-                $newDateString = date('m/d/Y', $newTimestamp); // Convert the new timestamp back to desired format
                 $messageBody .= 'Kindly see attached file for the List of Palawan Transactions that are subject for cancellation on ' . $newDateString . '.' . PHP_EOL; // Concatenating another string with a new line
                 $messageBody .= 'Please ensure to notify the beneficiaries to avoid cancellation. Once cancelled, the amount will be refunded to DOLE XI and shall be remitted to the National Treasury.' . PHP_EOL; // Concatenating another string with a new line
                 break;
