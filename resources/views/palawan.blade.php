@@ -6,6 +6,7 @@
         <title>{{ $subject }}</title>
     </head>
     <body>
+        <img src="https://magblogjapunmo.files.wordpress.com/2024/02/head-1.png" alt="Header Image" style="max-width:100%;">
         <p>Good day!</p>
         <p>We would like to inform you that we deposited the total amount of <strong>{{  strtoupper($inwords)  }}</strong> (P{{ number_format($oAmount,2) }}) on {{ $newDateString }}, with payroll name/s and details provided in the summary attached to this email.</p>
         <p>Thank you.</p>

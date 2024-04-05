@@ -31,54 +31,185 @@ class EmailProcessingCommand extends Command
      */
     public function handle()
     {
-        // Specify the root folder path within the storage directory
-        $rootFolderPath = storage_path('app/Email');
-        // Get all folders in the root folder
-        $folders = File::directories($rootFolderPath);
-        
+
+        // Value initialization
+        $day = 0;
+        $count = 01;
+        $amount = 0;
+        $newDateString = '';
+        $xnewDateString = '';
+
+
         do {
-            $nature = $this->ask('What is the nature of transaction?' . "\n" . '[1] Unclaimed' . "\n" . '[2] For Cancellation' . "\n" .  '(1 or 2)');
+            startover:
+            $nature = $this->ask("\n" . 'Choose Transaction' . "\n" . '[1] Send List of Unclaimed Transactions to Field Offices' . "\n" . '[2] Send List of Transaction for Cancellation to Field Offices' . "\n" 
+                                . '[3] Send Payrolls to Eight Under Par (Under Development)' . "\n" .  '(1 - 3)');
             
-            if ($nature != '1' && $nature != '2') {
+            if ($nature == 0 || $nature > 3) {
                 $this->line('Invalid input. Please try again.');
             }
-            if ($nature = '2') {
-                $day = $this->ask('Will be cancelled in how many days?' .  "\n" .  '(1 - 5)');
-                
+            if ($nature == 1) {
+                $final = $this->ask("\n" . 'You are about to send the LIST OF UNCLAIMED TRANSACTIONS TO FIELD OFFICES.' . "\n" . 'Make sure the files are already in the designated folders.' . "\n" .'Please type CONFIRM to continue. Press ENTER to start over.');
+                if (strtolower($final) != 'confirm') {
+                    goto startover;
+                }
             }
-        } while ($nature != '1' && $nature != '2');
-
-        $dateString = date('m/d/Y'); // Get current date in the desired format
-        $timestamp = strtotime($dateString); // Convert date string to timestamp
-        $newTimestamp = strtotime('+' . $day . 'days', $timestamp); // Add 2 days to the timestamp
-        $newDateString = date('m/d/Y', $newTimestamp); // Convert the new timestamp back to desired format
-        \Log::info($newDateString);
-        $count = 01;
-
-        // Loop through each folder
-        foreach ($folders as $folder) {
-            // Get the folder name
-            $folderName = basename($folder);
-            $subFolders = File::directories($folder);
-            // Sub Loop           
-            foreach ($subFolders as $subFolder){
-                $subFolderName = basename($subFolder);
-
-                // Specify the email address based on the folder name
-                $destinationEmail = $this->getEmailForFolder($folderName, $subFolderName);
-                $password = $subFolderName[0] . 'dole11' . strtolower($folderName) . date('mdy');
-                
-                // Get all files in the folder
-                $files = File::allFiles($subFolder);
-                
-                // Process the contents and send email
-               \Log::info($folderName . ' ' . $subFolderName . ' ' . $destinationEmail);
-               $this->sendEmail($destinationEmail, $files, $password, $folderName, $subFolderName, $count, $nature, $newDateString);
-
-                File::delete($files);
-                
-                $count = $count + 1;
+            if ($nature == 2) {
+                do {
+                    $day = $this->ask("\n" . 'Final claim is in how many days?' .  "\n" .  '(1 - 6)');
+                    if ($day > 6){
+                        $this->line('Invalid input. Choose from 1-6.');
+                    }
+                } while ($day > 6);
+                $newDateString = date('m/d/Y', strtotime('+' . $day . 'days', strtotime(date('m/d/Y'))));
+                $xnewDateString = date('m/d/Y', strtotime('+' . $day + 1 . 'days', strtotime(date('m/d/Y'))));                
+                $final = $this->ask("\n" . 'Final Claim: ' . $newDateString . "\n" . 'You are about to send the LIST OF TRANSACTIONS FOR CANCELLATION to Field Offices.' . "\n" . 'Make sure the details are correct and the files are already in the designated folders.' . "\n" .'Please type CONFIRM to continue. Press ENTER to start over.');
+                if (strtolower($final) != 'confirm') {
+                    goto startover;
+                }
             }
+            start:
+            if ($nature == 3) {
+                do {
+                    $amount = $this->ask("\n" . 'Amount Deposited?');
+                    if (!is_numeric($amount)){
+                        $this->line('Invalid Amount. Try Again');
+                    }
+                } while (!is_numeric($amount));
+                do {
+                    $day = $this->ask("\n" . 'Deposited how many days ago?' .  "\n" .  '(1 - 6), 0 if deposited on the same day.');
+                    if ($day > 6){
+                        $this->line('Invalid input. Choose from 1-6. 0 if deposited on the same day.');
+                    }
+                } while ($day > 6);
+                $newDateString = date('m/d/Y', strtotime('-' . $day . 'days', strtotime(date('m/d/Y'))));
+                do {
+                    $program = $this->ask("\n" . 'Program' . "\n" . '[1] GIP' . "\n" . '[2] TUPAD' . "\n" 
+                    . '[3] BOTH' . "\n" .  '(1 - 3)');
+                    if ($program > 4){
+                        $this->line('Invalid input. Choose from 1-3.');
+                    }
+                } while ($program > 3);
+                switch ($program) {
+                    case '1':
+                        $program = 'GIP';
+                        break;
+                    case '2':
+                        $program = 'TUPAD';
+                        break;
+                    case '3':
+                        $program = 'TUPAD AND GIP';
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+                do {
+                    $final = $this->ask("\n" . 'Amount: ' . number_format($amount,2)  . "\n" . 'Date Deposited: ' . $newDateString . "\n" . 'Program: ' . $program . "\n" 
+                    . 'Is this correct' . "\n" .  '[1] Yes' . "\n" .  '[2] Input Again' . "\n" .  '[3] Start Over' . "\n" . '(1-3)');
+                    if ($final == '2') {
+                            goto start;
+                        }
+                    elseif ($final == '3') {
+                        goto startover;
+                    }
+                } while ($final == 0 || $final > 3);
+            }
+        } while ($nature == 0 || $nature > 3);
+
+
+
+        if ($nature == 1 || $nature == 2){
+            // Specify the root folder path within the storage directory
+            $rootFolderPath = storage_path('app/Email');
+            // Get all folders in the root folder
+            $folders = File::directories($rootFolderPath);
+            
+            foreach ($folders as $folder) {
+                // Get the folder name
+                $folderName = basename($folder);
+                $subFolders = File::directories($folder);
+                // Sub Loop           
+                foreach ($subFolders as $subFolder){
+
+                    $files = File::allFiles($subFolder);
+                    $subFolderName = basename($subFolder);
+
+                    // Email and File Password Template
+                    $destinationEmail = $this->getEmailForFolder($folderName, $subFolderName);
+                    $password = $subFolderName[0] . 'dole11' . strtolower($folderName) . date('mdy');
+                    
+                    // Subject Picker
+                    switch ($nature) {
+                        case '1':
+                            $subject = $folderName . ' ' . $subFolderName . ' - Unclaimed Palawan Transaction/s as of ' . date('m/d/Y');  // Replace with your desired subject
+                            break;
+                        case '2':
+                            $subject = $folderName . ' ' . $subFolderName . ' - Palawan Transaction/s for CANCELLATION as of ' . date('m/d/Y');  // Replace with your desired subject
+                            break;
+                        default:
+                            # code...
+                            break;
+                    }
+
+                    // Send Mail, Skip if Empty
+                    if (empty($files)) {
+                        $this->info(sprintf("%02d", $count) . '. ' . $folderName . '-' . $subFolderName . ' has no Transactions. Skipping sending email.');
+                        \Log::info($count);
+                    }
+                    else {$this->info(sprintf("%02d", $count) . '. Sending Transactions to ' . $folderName . '-' . $subFolderName . '... (' . $destinationEmail . ')');
+                       $this->sendEmail($destinationEmail, $files, $password, $nature, $subject, $newDateString, $subFolderName, $xnewDateString);
+                    }
+
+                // Delete files after sending; Increment Log Count
+                    File::delete($files);
+                    $count = $count + 1;
+                }
+            }
+        }
+        else {
+            $palawan = storage_path('app/Palawan');
+            $files = File::allFiles($palawan);
+            $oAmount = $amount;
+            $destinationEmail = 'batchremsupport@palawanpawnshop.com';
+            $subject = 'DOLE XI - DEPOSITED P' . number_format($oAmount,2) . ' ON ' . $newDateString . ' FOR ' . $program . ' BENEFICIARIES';
+            $inwords = $this->convertNumberToWords($amount) . ' PESOS';
+            $amount = substr(round(($amount-floor($amount)),2),2);
+            \Log::info($subject);
+
+            if ($amount == 1) {
+                $inwords .= ' AND ' . $this->convertNumberToWords($amount) . ' CENTAVO ONLY';
+            }
+            elseif ($amount > 1) {
+                $inwords .= ' AND ' . $this->convertNumberToWords($amount) . ' CENTAVOS ONLY';
+            }
+            else {
+                $inwords .= ' ONLY';
+            }
+
+            $mailData = [
+                'subject' => $subject,
+                'newDateString' => $newDateString,
+                'oAmount' => $oAmount,
+                'inwords' => $inwords,
+            ];
+
+            // Send Mail, Skip if Empty
+            if (empty($files)) {
+                $this->info('No payrolls found.');
+            }
+                else {$this->info('Sending Payrolls to Eight Under Par, Inc... (' . $destinationEmail . ')');
+            }
+            
+            Mail::send('palawan', $mailData, function ($message) use ($destinationEmail, $subject, $files) {
+                $message->to($destinationEmail)->subject($subject);
+    
+                foreach ($files as $file) {
+                    $message->attach($file);
+                }
+            });
+            File::delete($files);
+    
         }
         echo "Transactions emailed successfully.";
         echo "Press Enter to continue...";
@@ -93,10 +224,6 @@ class EmailProcessingCommand extends Command
      */
     function getEmailForFolder($folderName, $subFolderName)
     {
-        // Add your logic to map folder names to email addresses
-        // You can use a switch statement, an array lookup, or any other method
-        // based on your specific requirements.
-
         switch ($folderName) 
         {
             case 'DORFO':
@@ -108,6 +235,8 @@ class EmailProcessingCommand extends Command
                         default:
                             return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
                     }
+            case 'DOCFO':
+                return 'remittancedocfodole11@gmail.com';
             case 'DCFO':
                 switch ($subFolderName)
                     {
@@ -115,18 +244,16 @@ class EmailProcessingCommand extends Command
                         case 'SPES':
                         case 'TUPAD':
                             return strtolower($subFolderName . 'remit' . $folderName . 'dole11@gmail.com');
-                            default:
-                            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
                     }
             case 'DSFO':
-                            switch ($subFolderName)
-                                {
-                                    case 'GIP':
-                                    case 'SPES':
-                                        return strtolower($subFolderName . 'remit' . $folderName . 'dole11@gmail.com');
-                                    default:
-                                        return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
-                                }                    
+                switch ($subFolderName)
+                    {
+                        case 'GIP':
+                        case 'SPES':
+                            return strtolower($subFolderName . 'remit' . $folderName . 'dole11@gmail.com');
+                        default:
+                            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+                    }                    
             case 'DNFO':
                 switch ($subFolderName)
                     {
@@ -165,46 +292,69 @@ class EmailProcessingCommand extends Command
      * @param string $subject
      * @param string $content
      */
-    function sendEmail($destinationEmail, $files, $password, $folderName, $subFolderName, $count, $nature, $newDateString)
+    function sendEmail($destinationEmail, $files, $password, $nature, $subject, $newDateString, $subFolderName, $xnewDateString)
     {
-        // Check if the content is empty
-        if (empty($files)) {
-            // Log an error or handle it as needed
-            $this->info(sprintf("%02d", $count) . '. ' . $folderName . '-' . $subFolderName . ' has no Transactions. Skipping sending email.');
-            \Log::info($count);
-            return;
-        }
+        $mailData = [
+            'subject' => $subject,
+            'nature' => $nature,
+            'password' => $password,
+            'xnewDateString' => $xnewDateString,
+            'newDateString' => $newDateString
+        ];
 
-        $this->info(sprintf("%02d", $count) . '. Sending Transactions to ' . $folderName . '-' . $subFolderName . '...');
-
-        $messageBody = 'Sir/Ma\'am' . PHP_EOL . PHP_EOL . 'Good day!' . PHP_EOL . PHP_EOL; // Concatenating strings with a new line
-
-        switch ($nature) {
-            case '1':
-                $subject = $folderName . ' ' . $subFolderName . ' - Unclaimed Palawan Transaction/s as of ' . date('m/d/Y');  // Replace with your desired subject
-                $messageBody .= 'Kindly see attached file for the List of Unclaimed Palawan Transactions as of ' . date('m/d/Y') . '.' . PHP_EOL; // Concatenating another string with a new line
-                break;
-            case '2':
-                $subject = $folderName . ' ' . $subFolderName . ' - Palawan Transaction/s for cancellation as of ' . date('m/d/Y');  // Replace with your desired subject
-                $messageBody .= 'Kindly see attached file for the List of Palawan Transactions that are subject for cancellation on ' . $newDateString . '.' . PHP_EOL; // Concatenating another string with a new line
-                $messageBody .= 'Please ensure to notify the beneficiaries to avoid cancellation. Once cancelled, the amount will be refunded to DOLE XI and shall be remitted to the National Treasury.' . PHP_EOL; // Concatenating another string with a new line
-                break;
-            default:
-                # code...
-                break;
-        }
-
-        $messageBody .= 'To view the file, please enter "' . $password . '" as the file password.' . PHP_EOL . PHP_EOL;
-        $messageBody .= 'Furthermore, this is to remind you that the TRANSACTION CODES are STRICTLY CONFIDENTIAL in nature.' . PHP_EOL . PHP_EOL;
-        $messageBody .= 'Thank you and God Bless.' . PHP_EOL . PHP_EOL . PHP_EOL . 'Yours truly,' . PHP_EOL . PHP_EOL . 'NOVIE JANE B. PANIAGUA';
-
-        Mail::raw($messageBody, function ($message) use ($destinationEmail, $subject, $files){
+        Mail::send('email', $mailData, function ($message) use ($destinationEmail, $subject, $files, $subFolderName) {
             $message->to($destinationEmail)->subject($subject);
-    
+
+            switch ($subFolderName) {
+                case 'GIP':
+                case 'SPES':
+                    if ($destinationEmail == 'employmentremittancerodole11@gmail.com') {
+                        break;
+                    }
+                    else {
+                        $message->cc('employmentremittancerodole11@gmail.com');
+                    }
+                    break;
+                default:
+                break;
+            }
+
             foreach ($files as $file) {
                 // Attach each file to the email
                 $message->attach($file);
             }
         });
     }
+    
+    function convertNumberToWords($amount) 
+    {
+        $words = [
+            0 => 'zero', 1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five', 6 => 'six', 7 => 'seven', 8 => 'eight', 9 => 'nine',
+            10 => 'ten', 11 => 'eleven', 12 => 'twelve', 13 => 'thirteen', 14 => 'fourteen', 15 => 'fifteen', 16 => 'sixteen', 17 => 'seventeen', 18 => 'eighteen', 19 => 'nineteen',
+            20 => 'twenty', 30 => 'thirty', 40 => 'forty', 50 => 'fifty', 60 => 'sixty', 70 => 'seventy', 80 => 'eighty', 90 => 'ninety'
+        ];
+    
+        if ($amount < 20) {
+            return $words[$amount];
+        }
+    
+        if ($amount < 100) {
+            return $words[(($amount / 10) * 10)-($amount % 10)] . '-' . $this->convertNumberToWords($amount % 10);
+        }
+    
+        if ($amount < 1000) {
+            return $words[$amount / 100] . ' hundred ' . $this->convertNumberToWords($amount % 100);
+        }
+    
+        if ($amount < 1000000) {
+            return $this->convertNumberToWords($amount / 1000) . ' thousand ' . $this->convertNumberToWords($amount % 1000);
+        }
+
+        if ($amount < 1000000000) {
+            return $this->convertNumberToWords($amount / 1000000) . ' million ' . $this->convertNumberToWords($amount % 1000000);
+        }    
+
+        return 'Number out of range';
+    }
+
 }

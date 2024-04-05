@@ -5,15 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\voucher;
-use App\Models\obligation;
-use App\Models\entry;
+
 
 use Illuminate\Support\Facades\Log;
 
 class all extends Controller
 {
-    //Receiving
-
     public function save(Request $request){
         $voucher = new voucher;
         $voucher->payee = $request->payee;
@@ -33,7 +30,12 @@ class all extends Controller
                 break;
 
             case 'budget':
-                $voucher = obligation::orderBy('id', 'desc')->get();
+                $voucher = voucher::where('isObligation','1')->orderBy('id', 'desc')->get();
+                return view('dashboard-o',['voucher'=>$voucher]);
+                break;
+
+            case 'entry':
+                $voucher = voucher::where('isEntry','1')->orderBy('id', 'desc')->get();
                 return view('dashboard-o',['voucher'=>$voucher]);
                 break;
 
@@ -47,69 +49,49 @@ class all extends Controller
     public function forward(){
         switch (Auth::user()->role) {
             case 'admin':
-                $voucher = voucher::where('is_forwarded','0')->orderBy('id', 'desc')->get();
+                $voucher = voucher::where('isObligation','0')->where('isEntry','0')->where('isRanca','0')->orderBy('id', 'desc')->get();
             return view('forward',['voucher'=>$voucher]);
             break;
 
             case 'budget':
-                $voucher = obligation::where('is_forwarded','0')->orderBy('id', 'desc')->get();
+                $voucher = voucher::where('isObligation','1')->where('isEntry','0')->where('isRanca','0')->orderBy('id', 'desc')->get();
                 return view('forward',['voucher'=>$voucher]);
                 break;
+            case 'entry':
+                $voucher = voucher::where('isEntry','1')->where('isRanca','0')->orderBy('id', 'desc')->get();
+                return view('forward',['voucher'=>$voucher]);
+                break;            
         }    
     }
 
     public function submitforward(Request $request){
         $itemIds = $request->input('data_id', []);
+        \Log::info($itemIds);
 
         foreach ($itemIds as $itemId) {
             $selectedValue = $request->input("forward_{$itemId}",3);       
             switch ($selectedValue) {
                 case 0:
-                    $forward = voucher::find($itemId);
-                    $voucher = new obligation;
-                    $voucher->voucherId = $forward->id;
-                    $voucher->payee = $forward->payee;
-                    $voucher->particulars = $forward->particulars;
-                    $voucher->amount = $forward->amount;
+                    $voucher = voucher::find($itemId);
                     $voucher->save();
-                    $forward->is_forwarded="1";
-                    $forward->save();
-                    $forward->remarks = $forward->remarks . "<br>Forwarded for Obligation by " . (Auth::user()->name) . " on " . ($forward->updated_at);
-                    $forward->save();
+                    $voucher->isObligation="1";
+                    $voucher->save();
+                    $voucher->remarks = $voucher->remarks . "<br>Forwarded for Obligation by " . (Auth::user()->name) . " on " . ($voucher->updated_at);
+                    $voucher->save();
                         break;
                 case 1:
-                    if (Auth::user()->role === 'admin'){
-                    $forward = voucher::find($itemId);
-                    $voucher = new entry;
-                    $voucher->voucherId = $forward->id;}
-                    else {
-                    $forward = obligation::find($itemId);
-                    $voucher = new entry;                        
-                    $voucher->voucherId = $forward->voucherId;}
-                    $voucher->payee = $forward->payee;
-                    $voucher->particulars = $forward->particulars;
-                    $voucher->amount = $forward->amount;
+                    $voucher = voucher::find($itemId);
                     $voucher->save();
-                    $forward->is_forwarded="1";
-                    $forward->save();
-                    if (Auth::user()->role === 'admin'){
-                    $forward->remarks = $forward->remarks . "<br>Forwarded for Entry by " . (Auth::user()->name) . " on " . ($forward->updated_at);
-                    $forward->save();
-                        break;}
-                    else{
-                    $remarks = voucher::find($forward->voucherId);
-                    $remarks->remarks = $remarks->remarks . "<br>Forwarded for Entry by " . (Auth::user()->name) . " on " . ($remarks->updated_at);
-                    $remarks->save();
-                    break;}
+                    $voucher->isEntry="1";
+                    $voucher->save();
+                    $voucher->remarks = $voucher->remarks . "<br>Forwarded for Entry by " . (Auth::user()->name) . " on " . ($voucher->updated_at);
+                    $voucher->save();
+                        break;
                 default:
                     break;
             }
         }
         return redirect()->back()->with('success', 'Form submitted successfully');
     }
-
-    //Obligation
-
-
 
 }

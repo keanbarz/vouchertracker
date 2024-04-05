@@ -34,9 +34,6 @@
 
     <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
     <div class="py-3 container-fluid">
-        <a href="/forward">
-            <button class="btn btn-primary">Forward Vouchers</button>
-        </a>
     </div>
     <div class="container-fluid">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">

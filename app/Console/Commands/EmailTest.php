@@ -35,57 +35,54 @@ class EmailTest extends Command
         $day = 0;
         $count = 01;
         $amount = 0;
+        $newDateString = '';
+        $xnewDateString = '';
 
 
         do {
-            startover:
-            $nature = $this->ask("\n" . 'Choose Transaction' . "\n" . '[1] Send List of Unclaimed Transactions to Field Offices' . "\n" . '[2] Send List of Transaction for Cancellation to Field Offices' . "\n" 
-                                . '[3] Send Payrolls to Eight Under Par (Under Development)' . "\n" .  '(1 - 3)');
-            
-            if ($nature == 0 || $nature > 3) {
-                $this->line('Invalid input. Please try again.');
-            }
+            $nature = $this->ask("\nChoose Transaction\n[1] Send List of Unclaimed Transactions to Field Offices\n[2] Send List of Transaction for Cancellation to Field Offices\n[3] Send Payrolls to Eight Under Par (Under Development)\n(1 - 3)");
+        
             if ($nature == 1) {
-                $final = $this->ask("\n" . 'You are about to send the LIST OF UNCLAIMED TRANSACTIONS TO FIELD OFFICES.' . "\n" . 'Make sure the files are already in the designated folders.' . "\n" .'Please type CONFIRM to continue. Press ENTER to start over.');
-                if ($final != 'CONFIRM' && $final != 'confirm') {
-                    goto startover;
+                $final = $this->ask("\nYou are about to send the LIST OF UNCLAIMED TRANSACTIONS TO FIELD OFFICES.\nMake sure the files are already in the designated folders.\nPlease type CONFIRM to continue. Press ENTER to start over.");
+                if (strtolower($final) !== 'confirm') {
+                    continue;
                 }
-            }
-            if ($nature == 2) {
+            } elseif ($nature == 2) {
                 do {
-                    $day = $this->ask("\n" . 'Will be cancelled in how many days?' .  "\n" .  '(1 - 6)');
-                    if ($day > 6){
+                    $day = $this->ask("\nFinal claim is in how many days?\n(1 - 6)");
+                    if ($day < 1 || $day > 6) {
                         $this->line('Invalid input. Choose from 1-6.');
                     }
-                } while ($day > 6);
-                $newDateString = date('m/d/Y', strtotime('+' . $day . 'days', strtotime(date('m/d/Y'))));
-                $final = $this->ask("\n" . 'You are about to send the LIST OF TRANSACTIONS FOR CANCELLATION ON ' . $newDateString . ' to Field Offices.' . "\n" . 'Make sure the details are correct and the files are already in the designated folders.' . "\n" .'Please type CONFIRM to continue. Press ENTER to start over.');
-                if ($final != 'CONFIRM' && $final != 'confirm') {
-                    goto startover;
+                } while ($day < 1 || $day > 6);
+                $newDateString = date('m/d/Y', strtotime('+' . $day . ' days'));
+                $final = $this->ask("\nYou are about to send the LIST OF TRANSACTIONS FOR CANCELLATION ON $newDateString to Field Offices.\nMake sure the details are correct and the files are already in the designated folders.\nPlease type CONFIRM to continue. Press ENTER to start over.");
+                if (strtolower($final) !== 'confirm') {
+                    continue;
                 }
-            }
-            start:
-            if ($nature == 3) {
+            } elseif ($nature == 3) {
                 do {
-                    $amount = $this->ask("\n" . 'Amount Deposited?');
-                    if (!is_numeric($amount)){
+                    $amount = $this->ask("\nAmount Deposited?");
+                    if (!is_numeric($amount)) {
                         $this->line('Invalid Amount. Try Again');
                     }
                 } while (!is_numeric($amount));
+        
                 do {
-                    $day = $this->ask("\n" . 'Deposited how many days ago?' .  "\n" .  '(1 - 6), 0 if deposited on the same day.');
-                    if ($day > 6){
-                        $this->line('Invalid input. Choose from 1-6. 0 if deposited on the same day.');
+                    $day = $this->ask("\nDeposited how many days ago?\n(1 - 6), 0 if deposited on the same day.");
+                    if ($day < 0 || $day > 6) {
+                        $this->line('Invalid input. Choose from 0-6.');
                     }
-                } while ($day > 6);
-                $newDateString = date('m/d/Y', strtotime('+' . $day . 'days', strtotime(date('m/d/Y'))));
+                } while ($day < 0 || $day > 6);
+        
+                $newDateString = date('m/d/Y', strtotime("-$day days"));
+        
                 do {
-                    $program = $this->ask("\n" . 'Program' . "\n" . '[1] GIP' . "\n" . '[2] TUPAD' . "\n" 
-                    . '[3] BOTH' . "\n" .  '(1 - 3)');
-                    if ($program > 4){
+                    $program = $this->ask("\nProgram\n[1] GIP\n[2] TUPAD\n[3] BOTH\n(1 - 3)");
+                    if ($program < 1 || $program > 3) {
                         $this->line('Invalid input. Choose from 1-3.');
                     }
-                } while ($program > 3);
+                } while ($program < 1 || $program > 3);
+        
                 switch ($program) {
                     case '1':
                         $program = 'GIP';
@@ -97,23 +94,23 @@ class EmailTest extends Command
                         $program = 'TUPAD AND GIP';
                         break;
                     default:
-                        # code...
                         break;
                 }
+        
                 do {
-                    $final = $this->ask("\n" . 'Amount: ' . number_format($amount,2)  . "\n" . 'Date Deposited: ' . $newDateString . "\n" . 'Program: ' . $program . "\n" 
-                    . 'Is this correct' . "\n" .  '[1] Yes' . "\n" .  '[2] Input Again' . "\n" .  '[3] Start Over' . "\n" . '(1-3)');
-                    if ($final == '2') {
-                            goto start;
-                        }
-                    elseif ($final == '3') {
-                        goto startover;
+                    $final = $this->ask("\nAmount: " . number_format($amount, 2) . "\nDate Deposited: $newDateString\nProgram: $program\nIs this correct?\n[1] Yes\n[2] Input Again\n[3] Start Over\n(1-3)");
+        
+                    if ($final == 2) {
+                        continue; // Input Again
+                    } elseif ($final == 3) {
+                        break 2; // Start Over
                     }
-                } while ($final == 0 || $final > 3);
+                } while ($final != 1);
+            } elseif ($nature == 0 || $nature > 3) {
+                $this->line('Invalid input. Please try again.');
             }
         } while ($nature == 0 || $nature > 3);
-
-
+       
 
         if ($nature == 1 || $nature == 2){
             // Specify the root folder path within the storage directory
@@ -132,16 +129,16 @@ class EmailTest extends Command
                     $subFolderName = basename($subFolder);
 
                     // Email and File Password Template
-                    $destinationEmail = 'cashier@r11.dole.gov.ph';//$this->getEmailForFolder($folderName, $subFolderName);
+                    $destinationEmail = $this->getEmailForFolder($folderName, $subFolderName);
                     $password = $subFolderName[0] . 'dole11' . strtolower($folderName) . date('mdy');
                     
                     // Subject Picker
                     switch ($nature) {
                         case '1':
-                            $subject = 'TEST MESSAGE ' . $folderName . ' ' . $subFolderName . ' - Unclaimed Palawan Transaction/s as of ' . date('m/d/Y');  // Replace with your desired subject
+                            $subject = $folderName . ' ' . $subFolderName . ' - Unclaimed Palawan Transaction/s as of ' . date('m/d/Y');  // Replace with your desired subject
                             break;
                         case '2':
-                            $subject = 'TEST MESSAGE ' . $folderName . ' ' . $subFolderName . ' - Palawan Transaction/s for cancellation as of ' . date('m/d/Y');  // Replace with your desired subject
+                            $subject = $folderName . ' ' . $subFolderName . ' - Palawan Transaction/s for CANCELLATION as of ' . date('m/d/Y');  // Replace with your desired subject
                             break;
                         default:
                             # code...
@@ -153,12 +150,12 @@ class EmailTest extends Command
                         $this->info(sprintf("%02d", $count) . '. ' . $folderName . '-' . $subFolderName . ' has no Transactions. Skipping sending email.');
                         \Log::info($count);
                     }
-                    else {$this->info(sprintf("%02d", $count) . '. Sending Transactions to ' . $folderName . '-' . $subFolderName . '...');
-                       /* $this->sendEmail($destinationEmail, $files, $password, $count, $nature, $subject, $newDateString);*/
+                    else {$this->info(sprintf("%02d", $count) . '. Sending Transactions to ' . $folderName . '-' . $subFolderName . '... (' . $destinationEmail . ')');
+                       $this->sendEmail($destinationEmail, $files, $password, $nature, $subject, $newDateString, $subFolderName, $xnewDateString);
                     }
 
                 // Delete files after sending; Increment Log Count
-                    /*File::delete($files);*/
+                    File::delete($files);
                     $count = $count + 1;
                 }
             }
@@ -166,11 +163,12 @@ class EmailTest extends Command
         else {
             $palawan = storage_path('app/Palawan');
             $files = File::allFiles($palawan);
-            $destinationEmail = 'cashier@r11.dole.gov.ph';
             $oAmount = $amount;
+            $destinationEmail = 'batchremsupport@palawanpawnshop.com';
+            $subject = 'DOLE XI - DEPOSITED P' . number_format($oAmount,2) . ' ON ' . $newDateString . ' FOR ' . $program . ' BENEFICIARIES';
             $inwords = $this->convertNumberToWords($amount) . ' PESOS';
             $amount = substr(round(($amount-floor($amount)),2),2);
-            \Log::info($amount);
+            \Log::info($subject);
 
             if ($amount == 1) {
                 $inwords .= ' AND ' . $this->convertNumberToWords($amount) . ' CENTAVO ONLY';
@@ -181,17 +179,6 @@ class EmailTest extends Command
             else {
                 $inwords .= ' ONLY';
             }
-            switch ($program) {
-                case 'GIP':
-                    $subject = 'TEST MESSAGE DOLE XI - DEPOSITED P' . number_format($oAmount,2) . ' ON ' . $newDateString . ' FOR ' . $program . ' BENEFICIARIES';
-                break;
-                case 'TUPAD':
-                    $subject = 'TEST MESSAGE DOLE XI - DEPOSITED P' . number_format($oAmount,2) . ' ON ' . $newDateString . ' FOR ' . $program . ' BENEFICIARIES';
-                break;
-                case 'TUPAD AND GIP':
-                    $subject = 'TEST MESSAGE DOLE XI - DEPOSITED P' . number_format($oAmount,2) . ' ON ' . $newDateString . ' FOR ' . $program . ' BENEFICIARIES';
-                break;
-            }
 
             $mailData = [
                 'subject' => $subject,
@@ -199,15 +186,22 @@ class EmailTest extends Command
                 'oAmount' => $oAmount,
                 'inwords' => $inwords,
             ];
+
+            // Send Mail, Skip if Empty
+            if (empty($files)) {
+                $this->info('No payrolls found.');
+            }
+                else {$this->info('Sending Payrolls to Eight Under Par, Inc... (' . $destinationEmail . ')');
+            }
             
-           /* Mail::send('palawan', $mailData, function ($message) use ($destinationEmail, $subject, $files) {
+            Mail::send('palawan', $mailData, function ($message) use ($destinationEmail, $subject, $files) {
                 $message->to($destinationEmail)->subject($subject);
     
                 foreach ($files as $file) {
                     $message->attach($file);
                 }
             });
-            File::delete($files);*/
+            File::delete($files);
     
         }
         echo "Transactions emailed successfully.";
@@ -234,6 +228,8 @@ class EmailTest extends Command
                         default:
                             return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
                     }
+            case 'DOCFO':
+                return 'remittancedocfodole11@gmail.com';
             case 'DCFO':
                 switch ($subFolderName)
                     {
@@ -241,8 +237,6 @@ class EmailTest extends Command
                         case 'SPES':
                         case 'TUPAD':
                             return strtolower($subFolderName . 'remit' . $folderName . 'dole11@gmail.com');
-                            default:
-                            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
                     }
             case 'DSFO':
                 switch ($subFolderName)
@@ -291,17 +285,32 @@ class EmailTest extends Command
      * @param string $subject
      * @param string $content
      */
-    function sendEmail($destinationEmail, $files, $password, $count, $nature, $subject, $newDateString)
+    function sendEmail($destinationEmail, $files, $password, $nature, $subject, $newDateString, $subFolderName, $xnewDateString)
     {
         $mailData = [
             'subject' => $subject,
             'nature' => $nature,
             'password' => $password,
+            'xnewDateString' => $xnewDateString,
             'newDateString' => $newDateString,
         ];
 
-        Mail::send('email', $mailData, function ($message) use ($destinationEmail, $subject, $files) {
+        Mail::send('email', $mailData, function ($message) use ($destinationEmail, $subject, $files, $subFolderName) {
             $message->to($destinationEmail)->subject($subject);
+
+            switch ($subFolderName) {
+                case 'GIP':
+                case 'SPES':
+                    if ($destinationEmail == 'employmentremittancerodole11@gmail.com') {
+                        break;
+                    }
+                    else {
+                        $message->cc('employmentremittancerodole11@gmail.com');
+                    }
+                    break;
+                default:
+                break;
+            }
 
             foreach ($files as $file) {
                 // Attach each file to the email

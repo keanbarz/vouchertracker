@@ -25,7 +25,7 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::get('/register', [all::class, 'create']);
+Route::get('/register', [ProfileController::class, 'create']);
 
 
 
