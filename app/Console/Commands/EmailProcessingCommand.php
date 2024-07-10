@@ -77,11 +77,11 @@ class EmailProcessingCommand extends Command
                     }
                 } while (!is_numeric($amount));
                 do {
-                    $day = $this->ask("\n" . 'Deposited how many days ago?' .  "\n" .  '(1 - 6), 0 if deposited on the same day.');
-                    if ($day > 6){
-                        $this->line('Invalid input. Choose from 1-6. 0 if deposited on the same day.');
+                    $day = $this->ask("\n" . 'Deposited how many days ago?' .  "\n" .  '(1 - 7), 0 if deposited on the same day.');
+                    if ($day > 7){
+                        $this->line('Invalid input. Choose from 1-7. 0 if deposited on the same day.');
                     }
-                } while ($day > 6);
+                } while ($day > 7);
                 $newDateString = date('m/d/Y', strtotime('-' . $day . 'days', strtotime(date('m/d/Y'))));
                 do {
                     $program = $this->ask("\n" . 'Program' . "\n" . '[1] GIP' . "\n" . '[2] TUPAD' . "\n" 
@@ -137,6 +137,7 @@ class EmailProcessingCommand extends Command
 
                     // Email and File Password Template
                     $destinationEmail = $this->getEmailForFolder($folderName, $subFolderName);
+                    \Log::info($folderName . '-' . $subFolderName . ': ' . $destinationEmail);
                     $password = $subFolderName[0] . 'dole11' . strtolower($folderName) . date('mdy');
                     
                     // Subject Picker
@@ -155,7 +156,7 @@ class EmailProcessingCommand extends Command
                     // Send Mail, Skip if Empty
                     if (empty($files)) {
                         $this->info(sprintf("%02d", $count) . '. ' . $folderName . '-' . $subFolderName . ' has no Transactions. Skipping sending email.');
-                        \Log::info($count);
+                        //\Log::info($count);
                     }
                     else {$this->info(sprintf("%02d", $count) . '. Sending Transactions to ' . $folderName . '-' . $subFolderName . '... (' . $destinationEmail . ')');
                        $this->sendEmail($destinationEmail, $files, $password, $nature, $subject, $newDateString, $subFolderName, $xnewDateString);
@@ -175,7 +176,7 @@ class EmailProcessingCommand extends Command
             $subject = 'DOLE XI - DEPOSITED P' . number_format($oAmount,2) . ' ON ' . $newDateString . ' FOR ' . $program . ' BENEFICIARIES';
             $inwords = $this->convertNumberToWords($amount) . ' PESOS';
             $amount = substr(round(($amount-floor($amount)),2),2);
-            \Log::info($subject);
+            //\Log::info($subject);
 
             if ($amount == 1) {
                 $inwords .= ' AND ' . $this->convertNumberToWords($amount) . ' CENTAVO ONLY';
@@ -207,6 +208,7 @@ class EmailProcessingCommand extends Command
                 foreach ($files as $file) {
                     $message->attach($file);
                 }
+                
             });
             File::delete($files);
     
@@ -277,7 +279,7 @@ class EmailProcessingCommand extends Command
                         case 'GIP':
                             return 'employmentremittancerodole11@gmail.com';
                         default:
-                            return strtolower($subFolderName . 'remittance' . $folderName . 'dole11@gmail.com');
+                            return 'livelihood@r11.dole.gov.ph';
                     }
                     
             default:
